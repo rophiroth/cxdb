@@ -1,0 +1,8 @@
+{ 
+	"rows":[
+		{"level":0,"id":"1","Model Type":"Modeller","Evaluator":"cparejaHyperScript","Score":"0.1","PDB":"cx39.pdb","PSF":"cx39.psf"}
+                ,{"level":0,"id":"2","Model Type":"Modeller","Evaluator":"prosa","Score":"0.6","PDB":"CXD4_MOUSE.B99990168.pdb","PSF":"cx39.psf"}
+                ,{"level":0,"id":"3","Model Type":"Modeller","Evaluator":"procheck","Score":"0.6","PDB":"CXD4_MOUSE.B99990168.pdb","PSF":"cx39.psf"}
+                ,{"level":0,"id":"4","Model Type":"Rosetta","Evaluator":"cparejaHyperScript","Score":"0.6","PDB":"CXD4_MOUSE.B99990168.pdb","PSF":"cx39.psf"}
+	]
+}

@@ -1,0 +1,6 @@
+{ 
+	"rows":[
+		{"id":"1","Name":"cx39","Family":"delta 4","Structure Type":"hemichannel","Organism":"mouse","Array":"homomeric","Description":"Una proteina muy\nbonita"}
+                ,{"id":"2","Name":"cx26","Family":"beta 2","Structure Type":"hemichannel","Organism":"mouse","Array":"homomeric","Description":"Una proteina muy\nbonita"}
+	]
+}
