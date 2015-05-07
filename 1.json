@@ -1,6 +1,0 @@
-{ 
-	"rows":[
-		{"id":"1","Model Type":"1","Evaluator":"1","Score":"1","PDB":"1/1.pdb","PSF":"1/1.psf"}
-                ,{"id":"2","Model Type":"1","Evaluator":"1","Score":"1","PDB":"1/1.pdb","PSF":"1/1.psf"}
-	]
-}
