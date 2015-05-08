@@ -1,6 +1,6 @@
 { 
 	"rows":[
-                {"level":0,"id":"2","Model Type":"CG+Solvate","Evaluator":"","Score":"","PDB":"CG_GCJ_CX26_solvate.pdb","PSF":"CG_GCJ_CX26_solvate.psf"}
-                ,{"level":0,"id":"3","Model Type":"CG+Solvate","Evaluator":"","Score":"","PDB":"CG_HC_CX26_solvate.pdb","PSF":"CG_HC_CX26_solvate.psf"}
+                {"level":0,"id":"2","Model Type":"Modeller+Lipids","Evaluator":"","Score":"","PDB":"AA_GJC_CX26_lipids.pdb","PSF":"AA_GJC_CX26_lipids.psf"}
+                ,{"level":0,"id":"3","Model Type":"CG+Solvate","Evaluator":"","Score":"","PDB":"CG_GJC_CX26_solvate.pdb","PSF":"CG_GJC_CX26_solvate.psf"}
 	]
 }

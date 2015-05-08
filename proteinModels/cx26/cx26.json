@@ -1,5 +1,5 @@
 { 
 	"rows":[
-		{"level":0,"id":"1","Model Type":"Modeller+Lipid","Evaluator":"","Score":"","PDB":"AA_GCJ_CX26_lipids.pdb","PSF":"AA_GCJ_CX26_lipids.psf"}
+		{"level":0,"id":"1","Model Type":"Modeller+Lipid","Evaluator":"","Score":"","PDB":"AA_HC_CX26_lipids.pdb","PSF":"AA_HC_CX26_lipids.psf"}
 	]
 }

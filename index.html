@@ -214,7 +214,7 @@
                     { label: 'Evaluator', name: 'Evaluator', width: 100, editable: true },
                     { label: 'Score', name: 'Score', width: 70, editable: true },
                     { label: 'PDB', name: 'PDB', width: '200%', editable: true,formatter: formatLink, autowidth: true },
-                    { label: 'PSF', name: 'PSF', width: '100%', editable: true,formatter: formatLink, autowidth: true },
+                    { label: 'PSF', name: 'PSF', width: '150%', editable: true,formatter: formatLink, autowidth: true },
                     { label: "Protein View", name: "PDB",width: 100,editable:true,hidden: true,
                         formatter: function(cellValue, options, rowObject){
                             $( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+parentRowKey+"/"+cellValue);
@@ -238,7 +238,7 @@
 					"loaded":"loaded",
 					"icon_field":"icon"
 				},
-                pager: "#" + childGridPagerID
+                //pager: "#" + childGridPagerID
             });
 
             $("#" + childGridID).jqGrid('filterToolbar');
@@ -272,7 +272,7 @@
                 }); */   
         //});
             function formatLink(cellValue, options, rowObject) {
-                return "<a href='" +"proteinModels/"+parentRowKey+"/"+ cellValue + "'>"+cellValue.substring(0, 25) + "</a>";
+                return "<a download href='" +"proteinModels/"+parentRowKey+"/"+ cellValue + "'>"+cellValue.substring(0, 25) + "</a>";
             };
         }
     </script>
