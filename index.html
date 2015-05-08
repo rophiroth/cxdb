@@ -13,6 +13,9 @@
     <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.css" />
     <!-- The link to the CSS that the grid needs -->
     <link rel="stylesheet" type="text/css" media="screen" href="css/trirand/ui.jqgrid.css" />
+<!--    jquery shits-->
+<!--    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">-->
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
     <meta charset="utf-8" />
     <title>The protein DB model grid</title>
@@ -31,13 +34,16 @@
 
          .ui-autocomplete {
             font-size: 11px;
-        }       
+        }
+        //ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable ui-resizable{ width: auto; maxwidth: 900px}
 
     </style>
 
     <table id="jqGrid"></table>
     <div id="jqGridPager"></div>
-
+    <div id="pvDialog" title="PV" hidden >
+        <iframe id="pvDialogFrame" src="js/pv/index.html" width="600" height="500"></iframe>
+    </div>
     <script type="text/javascript"> 
     
         $(document).ready(function () {
@@ -48,52 +54,13 @@
                 datatype: "json",
                 page: 1,
                 colModel: [
-                    {   label : "id",
-			sorttype: 'integer',
-                        name: 'id', 
-                        key: true,
-                        width: 150,
-                        editable: true, 
-                        //hidden: true
-		    },
-                    {   label : "Name",
-						//sorttype: 'integer',
-                        name: 'Name', 
-                        key: true,
-                        width: 150,
-                        editable: true 
-		    },
-                    {   label : "Family",
-						//sorttype: 'integer',
-                        name: 'Family', 
-                        width: 150,
-                        editable: true
-		    },
-                    {   label : "Structure Type",
-						//sorttype: 'integer',
-                        name: 'Structure Type', 
-                        width: 150,
-                        editable: true
-		    },
-                    {   label : "Organism",
-						//sorttype: 'integer',
-                        name: 'Organism', 
-                        width: 150,
-                        editable: true
-		    },
-                    {   label : "Array",
-						//sorttype: 'integer',
-                        name: 'Array', 
-                        width: 150,
-                        editable: true
-		    },
-                    {   label : "Description",
-						//sorttype: 'integer',
-                        name: 'Description', 
-                        width: 150,
-                        editable: true,
-                        autowidth: true
-		    },
+                    {   label : "id",sorttype: 'integer',name: 'id',key: true,hidden:true,width: 150,editable: true},
+                    {   label : "Name",name: 'Name',key: true,width: 150,editable: true},
+                    {   label : "Family",name: 'Family',width: 150,editable: true},
+                    {   label : "Structure Type",name: 'Structure Type',width: 150,editable: true},
+                    {   label : "Organism",name: 'Organism',width:150,editable: true },
+                    {   label : "Array",name: 'Array',width: 150,editable: true },
+                    {   label : "Description",name: 'Description', width: 150,editable: true,autowidth: true,hidden:true},
                     /*{
 						label: "Customer ID",
                         name: 'CustomerID',
@@ -163,19 +130,29 @@
 						name: 'Freight', width: 150 
                                             ,editable: true},*/
                 ],
-				loadonce: true,
-				viewrecords: true,
+		loadonce: true,
+		viewrecords: true,
                 width: '100%',
-                height: 250,
+                height: 550,
                 rowNum: 10,
                 shrinkToFit: true,
                 subGrid: true, // set the subGrid property to true to show expand buttons for each row
                 subGridRowExpanded: showChildGrid, // javascript function that will take care of showing 
-                pager: "#jqGridPager"
+                subGridOptions : {expandOnLoad: false,reloadOnExpand :false,selectOnExpand : true },// expand all rows on load
+                pager: "#jqGridPager",
+                loadComplete: function() {
+//                    var grid = $("#jqGrid");
+//                    var subGridCells = $("td.sgcollapsed",grid[0]);
+//                    $.each(subGridCells,function(i,value){
+//                        if (i!==0) {
+//                            $(value).unbind('click').html('');
+//                        }
+//                    });
+                }
             });
 			// activate the toolbar searching
             $('#jqGrid').jqGrid('filterToolbar');
-	    $('#jqGrid').jqGrid('navGrid',"#jqGridPager", {                
+	   /* $('#jqGrid').jqGrid('navGrid',"#jqGridPager", {                
                 search: true, // show search button on the toolbar
                 add: true,
                 edit: true,
@@ -202,9 +179,17 @@
                     errorTextFormat: function (data) {
                         return 'Error: ' + data.responseText
                     }
-                });    
+                });*/
         });
 
+        //popup3dmodel function
+        function show3dModel(pdb){
+            $(function(){$("#pvDialog").dialog();});                    
+            //$( "#pvDialog" ).hidden = false;
+            //alert(pdb);
+            //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+pdb);
+            $( "#pvDialog" ).parent().css( "width", "auto");
+        }
         // the event handler on expanding parent row receives two parameters
         // the ID of the grid tow  and the primary key of the row
         function showChildGrid(parentRowID, parentRowKey) {
@@ -224,14 +209,20 @@
                 datatype: "json",
                 page: 1,
                 colModel: [
-                    { label: 'ID', name: 'id', key: true, width: 75, editable: true },
+                    { label: 'ID', name: 'id', key: true, width: 70, editable: true },
                     { label: 'Model Type', name: 'Model Type', width: 100, editable: true },
                     { label: 'Evaluator', name: 'Evaluator', width: 100, editable: true },
-                    { label: 'Score', name: 'Score', width: 100, editable: true },
+                    { label: 'Score', name: 'Score', width: 70, editable: true },
                     { label: 'PDB', name: 'PDB', width: '200%', editable: true,formatter: formatLink, autowidth: true },
-                    { label: 'PSF', name: 'PSF', width: '100%', editable: true,formatter: formatLink, autowidth: true }
+                    { label: 'PSF', name: 'PSF', width: '100%', editable: true,formatter: formatLink, autowidth: true },
+                    { label: "Protein View", name: "PDB",width: 100,editable:true,hidden: true,
+                        formatter: function(cellValue, options, rowObject){
+                            $( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+parentRowKey+"/"+cellValue);
+                            return "<input type='button' value='"+cellValue+" View 3d model' onclick='show3dModel("+cellValue+")'\>";
+                        }
+                    },
                 ],
-				loadonce: true,
+		loadonce: true,
                 width: '100%',
                 height: '100%',
                 shrinkToFit: false,
@@ -251,7 +242,7 @@
             });
 
             $("#" + childGridID).jqGrid('filterToolbar');
-            $("#" + childGridID).jqGrid('navGrid',"#"+childGridPagerID, {                
+            /*$("#" + childGridID).jqGrid('navGrid',"#"+childGridPagerID, {                
                 search: true, // show search button on the toolbar
                 add: true,
                 edit: true,
@@ -278,7 +269,7 @@
                     errorTextFormat: function (data) {
                         return 'Error: ' + data.responseText
                     }
-                });    
+                }); */   
         //});
             function formatLink(cellValue, options, rowObject) {
                 return "<a href='" +"proteinModels/"+parentRowKey+"/"+ cellValue + "'>"+cellValue.substring(0, 25) + "</a>";

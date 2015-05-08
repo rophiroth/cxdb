@@ -1,0 +1,6 @@
+{ 
+	"rows":[
+                {"level":0,"id":"2","Model Type":"CG+Solvate","Evaluator":"","Score":"","PDB":"CG_GCJ_CX26_solvate.pdb","PSF":"CG_GCJ_CX26_solvate.psf"}
+                ,{"level":0,"id":"3","Model Type":"CG+Solvate","Evaluator":"","Score":"","PDB":"CG_HC_CX26_solvate.pdb","PSF":"CG_HC_CX26_solvate.psf"}
+	]
+}
