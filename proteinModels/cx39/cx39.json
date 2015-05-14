@@ -1,16 +1,16 @@
 { 
 	"rows":[
 		{"level":0,"id":"1","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"10","PDB":"AA_HC_CX39.pdb","PSF":"AA_HC_CX39.psf"}
-                ,{"level":0,"id":"2","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"9","PDB":"CXD4_MOUSE.B99990020.pdb","PSF":""}
-                ,{"level":0,"id":"3","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"8","PDB":"CXD4_MOUSE.B99990168.pdb","PSF":""}
-                ,{"level":0,"id":"4","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"7","PDB":"CXD4_MOUSE.B99990107.pdb","PSF":""}
-                ,{"level":0,"id":"5","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"6","PDB":"CXD4_MOUSE.B99990140.pdb","PSF":""}
-                ,{"level":0,"id":"6","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"5","PDB":"CXD4_MOUSE.B99990346.pdb","PSF":""}
-                ,{"level":0,"id":"7","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"4","PDB":"CXD4_MOUSE.B99990477.pdb","PSF":""}
-                ,{"level":0,"id":"8","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"3","PDB":"CXD4_MOUSE.B99990771.pdb","PSF":""}
-                ,{"level":0,"id":"9","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"2","PDB":"CXD4_MOUSE.B99990828.pdb","PSF":""}
-                ,{"level":0,"id":"10","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"1","PDB":"CXD4_MOUSE.B99990887.pdb","PSF":""}
-                ,{"level":0,"id":"11","Model Type":"Modeller+Lipid","Evaluator":"","Score":"","PDB":"AA_HC_CX39_lipids.pdb","PSF":"AA_HC_CX39_lipids.psf"}
-                ,{"level":0,"id":"12","Model Type":"CG+Solvate","Evaluator":"","Score":"","PDB":"CG_HC_CX39_solvate.pdb","PSF":"CG_HC_CX39_solvate.psf"}
+                ,{"parent":"1","level":1,"isLeaf":true,"id":"2","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"9","PDB":"CXD4_MOUSE.B99990020.pdb","PSF":""}
+                ,{"parent":"1","level":1,"isLeaf":true,"id":"3","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"8","PDB":"CXD4_MOUSE.B99990168.pdb","PSF":""}
+                ,{"parent":"1","level":1,"isLeaf":true,"id":"4","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"7","PDB":"CXD4_MOUSE.B99990107.pdb","PSF":""}
+                ,{"parent":"1","level":1,"isLeaf":true,"id":"5","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"6","PDB":"CXD4_MOUSE.B99990140.pdb","PSF":""}
+                ,{"parent":"1","level":1,"isLeaf":true,"id":"6","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"5","PDB":"CXD4_MOUSE.B99990346.pdb","PSF":""}
+                ,{"parent":"1","level":1,"isLeaf":true,"id":"7","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"4","PDB":"CXD4_MOUSE.B99990477.pdb","PSF":""}
+                ,{"parent":"1","level":1,"isLeaf":true,"id":"8","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"3","PDB":"CXD4_MOUSE.B99990771.pdb","PSF":""}
+                ,{"parent":"1","level":1,"isLeaf":true,"id":"9","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"2","PDB":"CXD4_MOUSE.B99990828.pdb","PSF":""}
+                ,{"parent":"1","level":1,"isLeaf":true,"id":"10","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"1","PDB":"CXD4_MOUSE.B99990887.pdb","PSF":""}
+                ,{"id":"11","Model Type":"Modeller+Lipid","Evaluator":"","Score":"","PDB":"AA_HC_CX39_lipids.pdb","PSF":"AA_HC_CX39_lipids.psf"}
+                ,{"id":"12","Model Type":"CG+Solvate","Evaluator":"","Score":"","PDB":"CG_HC_CX39_solvate.pdb","PSF":"CG_HC_CX39_solvate.psf"}
 	]
 }

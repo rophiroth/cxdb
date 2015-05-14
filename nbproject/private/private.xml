@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <coverage xmlns="http://www.netbeans.org/ns/code-coverage/1" enabled="true"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/var/www/html/cxGrid/proteinModels/cx39/CXD4_MOUSE.B99990168.pdb</file>
+            <file>file:/var/www/html/cxGrid/js/pv/index.html</file>
+            <file>file:/var/www/html/cxGrid/js/pv/demo.js</file>
+            <file>file:/var/www/html/cxGrid/proteinModels/cx26gjc/cx26gjc.json</file>
+            <file>file:/var/www/html/cxGrid/proteinModels/cx39/cx39.pdb</file>
+            <file>file:/var/www/html/cxGrid/proteinModels/cx26/cx26.json</file>
+            <file>file:/var/www/html/cxGrid/index.html</file>
+            <file>file:/var/www/html/cxGrid/db/data.json</file>
+            <file>file:/var/www/html/cxGrid/proteinModels/cx39/cx39.json</file>
+        </group>
+    </open-files>
 </project-private>
