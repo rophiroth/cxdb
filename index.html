@@ -42,7 +42,8 @@
     <table id="jqGrid"></table>
     <div id="jqGridPager"></div>
     <div id="pvDialog" title="PV" hidden >
-        <iframe id="pvDialogFrame" src="js/pv/index.html" width="600" height="500"></iframe>
+        <!--<iframe id="pvDialogFrame" src="js/pv/index.html" width="600" height="500"></iframe>-->
+        <iframe id="pvDialogFrame" width="600" height="500"></iframe>
     </div>
     <input type="button" value="Download Selected Models" onclick="downloadSelecteds()" />
     <div id="downloader"></div>
@@ -71,7 +72,7 @@
                 ],
 		loadonce: true,
 		viewrecords: true,
-                width: '100%',
+                width: '150%',
                 height: 550,
                 rowNum: 10,
                 shrinkToFit: true,
@@ -123,11 +124,13 @@
 
         //popup3dmodel function
         function show3dModel(pdb){
+            //alert(pdb);
             $(function(){$("#pvDialog").dialog();});                    
             //$( "#pvDialog" ).hidden = false;
-            //alert(pdb);
+            
             //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+pdb);
             $( "#pvDialog" ).parent().css( "width", "auto");
+            $( "#pvDialogFrame").attr('src',"js/jsmol/index.php?pdb="+pdb);
         }
         // the event handler on expanding parent row receives two parameters
         // the ID of the grid tow  and the primary key of the row
@@ -151,15 +154,16 @@
                 colModel: [
                     { label:' ',index:'select',name:'select',edittype:'checkbox',hidden:false,editable:true,width:15,search:false,formatter: "checkbox",formatoptions:{disabled:false}},
                     { label: 'ID', name: 'id', key: true, width: 70, editable: true },
-                    { label: 'Model Type', name: 'Model Type', width: 100, editable: true },
-                    { label: 'Evaluator', name: 'Evaluator', width: 100, editable: true },
+                    { label: 'Model Type', name: 'Model Type', width: 75, editable: true },
+                    { label: 'Evaluator', name: 'Evaluator', width: 75, editable: true },
                     { label: 'Score', name: 'Score', width: 70, editable: true },
-                    { label: 'PDB', name: 'PDB', width: '200%', editable: true,formatter: formatLink, autowidth: true },
+                    { label: 'PDB', name: 'PDB', width: '160%', editable: true,formatter: formatLink, autowidth: true },
                     { label: 'PSF', name: 'PSF', width: '150%', editable: true,formatter: formatLink, autowidth: true },
-                    { label: "Protein View", name: "PDB",width: 100,editable:true,hidden: true,
+                    { label: "3D Model", name: "PDB",width: 55,align:'center',search:false,editable:false,hidden: false,
                         formatter: function(cellValue, options, rowObject){
-                            $( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+parentRowKey+"/"+cellValue);
-                            return "<input type='button' value='"+cellValue+" View 3d model' onclick='show3dModel("+cellValue+")'\>";
+                            //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+parentRowKey+"/"+cellValue);
+                            //$( "#pvDialogFrame" ).attr('src','js/jsmol/index.php?pdb='+parentRowKey+"/"+cellValue);
+                            return "<input type='button' value='view' View 3d model' onclick='show3dModel(\""+parentRowKey+"/"+cellValue+"\")'\>";
                         }
                     },
                 ],
