@@ -12,5 +12,6 @@
                 ,{"parent":"1","level":1,"isLeaf":true,"id":"10","Model Type":"Modeller","Evaluator":"Whatcheck","Score":"1","PDB":"CXD4_MOUSE.B99990887.pdb","PSF":""}
                 ,{"id":"11","Model Type":"Modeller+Lipid","Evaluator":"","Score":"","PDB":"AA_HC_CX39_lipids.pdb","PSF":"AA_HC_CX39_lipids.psf"}
                 ,{"id":"12","Model Type":"CG+Solvate","Evaluator":"","Score":"","PDB":"CG_HC_CX39_solvate.pdb","PSF":"CG_HC_CX39_solvate.psf"}
+                ,{"id":"390","Model Type":"CG+Solvate","Evaluator":"","Score":"","PDB":"CG_HC_CX39_solvate.pdb","PSF":"CG_HC_CX39_solvate.psf"}
 	]
 }

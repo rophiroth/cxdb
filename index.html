@@ -153,7 +153,7 @@
                 page: 1,
                 colModel: [
                     { label:' ',index:'select',name:'select',edittype:'checkbox',hidden:false,editable:true,width:15,search:false,formatter: "checkbox",formatoptions:{disabled:false}},
-                    { label: 'ID', name: 'id', key: true, width: 70, editable: true },
+                    { label: 'ID', name: 'id', key: true, width: 70, editable: true,formatter: formatId },
                     { label: 'Model Type', name: 'Model Type', width: 75, editable: true },
                     { label: 'Evaluator', name: 'Evaluator', width: 75, editable: true },
                     { label: 'Score', name: 'Score', width: 70, editable: true },
@@ -295,6 +295,10 @@
                     return "<a id=\""+cellValue+"\" download href='" +"proteinModels/"+parentRowKey+"/"+ cellValue + "'>"+cellValue+ "</a>";
                 else
                     return '';
+            };
+            
+            function formatId(cellValue, options, rowObject) {
+                return parseInt(cellValue).toString(36);
             };
         }
         
