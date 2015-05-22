@@ -6,30 +6,6 @@
 
 jmolInitialize(".")
 
-function callback(a,b) {
- document.title=[a,b,b.charCodeAt(8)]
- return b
-}
-
-function sync() {
- var syncing = document.getElementById("drive").checked
- var s = (syncing ? 'sync * on;sync * "set syncMouse on;set syncScript off";sync jmolAppletC SLAVE;sync jmolAppletD SLAVE': 'sync * off')
- jmolScript(s, "A");
-}
-
-function syncAll() {
- var s = 'sync *;set syncScript true;sync * "reset";'
- jmolScript(s, "A");
- sync();
-}
-
-function sync2() {
- var syncing = document.getElementById("drive").checked
- var s = (syncing ? 'sync * off;sync . on;sync jmolAppletB on;sync jmolAppletB "set syncMouse on;set syncScript off";': 'sync * off')
- jmolScript(s, "A");
-}
-
-
 function doLoad() {
  document.getElementById("info").reset()
 }

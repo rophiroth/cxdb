@@ -53,17 +53,20 @@
     <script type="text/javascript" src="js/FileSaver.js"></script>-->
     <script src="js/jquery-multidownload/jquery-multidownload.js"></script>
     <script type="text/javascript"> 
+        //alert(parseInt('ZZ',36)+" "+(parseInt(1295)).toString(36));
     
         $(document).ready(function () {
             $("#jqGrid").jqGrid({
-                url: 'db/data.json',
+                //url: 'db/data.json',
                 editurl: 'clientArray',
                 //mtype: "GET",
-                datatype: "json",
+                //datatype: "json",
+                url: 'db/proteins.php',
+                datatype: 'xml',
                 page: 1,
                 colModel: [
-                    {   label : "id",sorttype: 'integer',name: 'id',key: true,hidden:true,width: 150,editable: true},
-                    {   label : "Name",name: 'Name',key: true,width: 150,editable: true},
+                    {   label : "id",sorttype: 'integer',name: 'id',hidden:false,width: 150,editable: true},
+                    {   label : "Name",name: 'Name',key: false,width: 150,editable: true},
                     {   label : "Family",name: 'Family',width: 150,editable: true},
                     {   label : "Structure Type",name: 'Structure Type',width: 150,editable: true},
                     {   label : "Organism",name: 'Organism',width:150,editable: true },
@@ -77,6 +80,7 @@
                 rowNum: 10,
                 shrinkToFit: true,
                 subGrid: true, // set the subGrid property to true to show expand buttons for each row
+                onSelectRow: onSelectRow,
                 subGridRowExpanded: showChildGrid, // javascript function that will take care of showing 
                 subGridOptions : {expandOnLoad: false,reloadOnExpand :false,selectOnExpand : true },// expand all rows on load
                 pager: "#jqGridPager",
@@ -138,27 +142,30 @@
         function showChildGrid(parentRowID, parentRowKey) {
             var childGridID = parentRowID + "_table";
             var childGridPagerID = parentRowID + "_pager";
-            //alert(childGridID +" "+ parentRowKey);
+            var pid = $("#jqGrid").jqGrid('getCell',parentRowKey,'id');
+            //alert(pid+" "+childGridID +" "+ parentRowKey);
             // send the parent row primary key to the server so that we know which grid to show
             var childGridURL = "proteinModels/"+parentRowKey+"/"+parentRowKey+".json";
             //childGridURL = childGridURL + "&parentRowID=" + encodeURIComponent(parentRowKey)
             actualSubGrid = childGridID;
             // add a table and pager HTML elements to the parent grid row - we will render the child grid here
             $('#' + parentRowID).append('<table id=' + childGridID + '></table><div id=' + childGridPagerID + ' class=scroll></div>');
-
             $("#" + childGridID).jqGrid({
                 url: childGridURL,
+                //url: 'db/db.php',
                 mtype: "GET",
                 datatype: "json",
+                //datatype: "xml",
                 page: 1,
                 colModel: [
                     { label:' ',index:'select',name:'select',edittype:'checkbox',hidden:false,editable:true,width:15,search:false,formatter: "checkbox",formatoptions:{disabled:false}},
-                    { label: 'ID', name: 'id', key: true, width: 70, editable: true,formatter: formatId },
+                    { label: 'ID', name: 'id', key: true, width: 70, editable: true,formatter: function formatId(cellValue, options, rowObject) {
+                    return parseInt(cellValue).toString(36)+parseInt(pid).toString(36); } },
                     { label: 'Model Type', name: 'Model Type', width: 75, editable: true },
                     { label: 'Evaluator', name: 'Evaluator', width: 75, editable: true },
                     { label: 'Score', name: 'Score', width: 70, editable: true },
                     { label: 'PDB', name: 'PDB', width: '160%', editable: true,formatter: formatLink, autowidth: true },
-                    { label: 'PSF', name: 'PSF', width: '150%', editable: true,formatter: formatLink, autowidth: true },
+                    { label: 'PSF', name: 'PSF', width: '150%', editable: true,formatter: formatLink, autowidth: true,hidden: true },
                     { label: "3D Model", name: "PDB",width: 55,align:'center',search:false,editable:false,hidden: false,
                         formatter: function(cellValue, options, rowObject){
                             //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+parentRowKey+"/"+cellValue);
@@ -297,9 +304,6 @@
                     return '';
             };
             
-            function formatId(cellValue, options, rowObject) {
-                return parseInt(cellValue).toString(36);
-            };
         }
         
         function downloadSelecteds()
@@ -363,6 +367,7 @@
         //replaced with a dusty solution
         function onSelectRow(id)
         {
+            //alert(id);
         }
     </script>
 </body>
