@@ -14,7 +14,7 @@
     <!-- The link to the CSS that the grid needs -->
     <link rel="stylesheet" type="text/css" media="screen" href="css/trirand/ui.jqgrid.css" />
 <!--    jquery shits-->
-<!--    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
@@ -41,9 +41,9 @@
 
     <table id="jqGrid"></table>
     <div id="jqGridPager"></div>
-    <div id="pvDialog" title="PV" hidden >
+    <div id="pvDialog" title="3D Model" hidden >
         <!--<iframe id="pvDialogFrame" src="js/pv/index.html" width="600" height="500"></iframe>-->
-        <iframe id="pvDialogFrame" width="600" height="500"></iframe>
+        <iframe id="pvDialogFrame" width="500" height="530"></iframe>
     </div>
     <input type="button" value="Download Selected Models" onclick="downloadSelecteds()" />
     <div id="downloader"></div>
@@ -66,7 +66,9 @@
                 page: 1,
                 colModel: [
                     {   label : "id",sorttype: 'integer',name: 'id',hidden:false,width: 150,editable: true},
-                    {   label : "Name",name: 'Name',key: false,width: 150,editable: true},
+                    {   label : "Name",name: 'Name',key: false,width: 150,editable: true,
+                        stype: "select",searchoptions: { value: ":All"+fillOptions("name") }
+                    },
                     {   label : "Family",name: 'Family',width: 150,editable: true},
                     {   label : "Structure Type",name: 'Structure Type',width: 150,editable: true},
                     {   label : "Organism",name: 'Organism',width:150,editable: true },
@@ -125,6 +127,12 @@
                     }
                 });*/
         });
+        //function to fill select box with actual column data (what else?! :P)
+        function fillOptions(column)
+        {
+            //get column values and fill text separated by coma
+            return "";
+        }
 
         //popup3dmodel function
         function show3dModel(pdb){
@@ -163,9 +171,9 @@
                     return parseInt(cellValue).toString(36)+parseInt(pid).toString(36); } },
                     { label: 'Model Type', name: 'Model Type', width: 75, editable: true },
                     { label: 'Evaluator', name: 'Evaluator', width: 75, editable: true },
-                    { label: 'Score', name: 'Score', width: 70, editable: true },
-                    { label: 'PDB', name: 'PDB', width: '160%', editable: true,formatter: formatLink, autowidth: true },
-                    { label: 'PSF', name: 'PSF', width: '150%', editable: true,formatter: formatLink, autowidth: true,hidden: true },
+                    { label: 'Score', name: 'Score', width: 70,search:false, editable: true },
+                    { label: 'PDB', name: 'PDB', width: '160%',search:false, editable: true,formatter: formatLink, autowidth: true },
+                    { label: 'PSF', name: 'PSF', width: '150%',search:false, editable: true,formatter: formatLink, autowidth: true,hidden: true },
                     { label: "3D Model", name: "PDB",width: 55,align:'center',search:false,editable:false,hidden: false,
                         formatter: function(cellValue, options, rowObject){
                             //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+parentRowKey+"/"+cellValue);
@@ -204,7 +212,7 @@
                     };
                     var iCol = getColumnIndexByName($(this), 'select'), rows = this.rows, i,
                         c = rows.length;
-
+                        this.
                     for (i = 1; i < c; i += 1) {
                         $(('input[type="checkbox"]'),rows[i].cells[iCol]).click(function (e) {
                             var row = $(e.target).closest('tr')[0];
@@ -236,7 +244,7 @@
                     link.download ='';
                     link.name = pdb;
                     link.href = pdb;
-                    link.innerHTML = pdb+" \n";
+                    link.innerHTML = pdb+" </BR>";
                     link.className = "pdb";
                     var div = document.getElementById('downloader');
                     //document.write(link);
@@ -268,6 +276,7 @@
                 }
             }
             $("#" + childGridID).jqGrid('filterToolbar');
+            //UNCOMMENT TO ENABLE PAGER!
             /*$("#" + childGridID).jqGrid('navGrid',"#"+childGridPagerID, {      //bottom navbar, commented to disable it          
                 search: true, // show search button on the toolbar
                 add: true,
@@ -311,6 +320,7 @@
             //$('.pdb').multiDownload('click',{delay: 10000,type: "adownload"});
             $('.pdb').multiDownload();
         }
+        //DEPRECTAED!
         function downloadSelectedRows() {
             //cleaning div helper
             var div = document.getElementById('downloader');
@@ -348,6 +358,7 @@
 //                alert(result);
             }
         }
+        //DEPRECATED
         //This function create a temp a element marked as downlodeable for multidownload plugin
         function fileDownload(uri)
         {

@@ -33,7 +33,7 @@ $db = mysql_connect($dbhost, $dbuser, $dbpassword) or die("Connection Error: " .
 mysql_select_db($database) or die("Error connecting to db."); 
  
 // calculate the number of rows for the query. We need this for paging the result 
-$result = mysql_query("SELECT COUNT(*) AS count FROM getAllProteins"); 
+$result = mysql_query("SELECT COUNT(*) AS count FROM getAllProteins;"); 
 $row = mysql_fetch_array($result,MYSQL_ASSOC); 
 $count = $row['count']; 
  
@@ -56,7 +56,7 @@ $start = $limit*$page - $limit;
 if($start <0) $start = 0; 
  
 // the actual query for the grid data 
-$SQL = "SELECT * FROM getAllProteins"; // ORDER BY $sidx $sord LIMIT $start , $limit"; 
+$SQL = "SELECT * FROM getAllProteins;"; // ORDER BY $sidx $sord LIMIT $start , $limit"; 
 $result = mysql_query( $SQL ) or die("Couldn't execute query.".mysql_error()); 
  
 // we should set the appropriate header information. Do not forget this.
@@ -82,18 +82,3 @@ while($row = mysql_fetch_array($result,MYSQL_ASSOC)) {
 $s .= "</rows>"; 
  
 echo $s;
-
-function getArrayText($isHeteromeric,$isHeterotipic)
-{
-    $result = "";
-    if($isHeteromeric){
-        $result = "Heteromeric";}
-    if(!$isHeteromeric){
-        $result = "Homomeric";}
-    if($isHeterotipic){
-        $result .= " and Heterotipic";}
-    if($isHeterotipic!= null && !$isHeterotipic){
-        $result .= " and Homotipic";}
-        //echo $result;
-    return $result;
-}
