@@ -1,0 +1,16 @@
+{
+	"rows":[
+		{"id":5,"Model Type":"CG+Solvate","Evaluator":"","Score":,"PDB":"CG_HC_CX39_solvate.pdb","Alignment":"","Sequence Identity":"0","Sequence Similarity":"0"}
+		,{"id":0,"Model Type":"Modeller","Evaluator":"Whatcheck","Score":10,"PDB":"AA_HC_CX39.pdb","Alignment":"Alineamiento-CX39 (modified).fasta","Sequence Identity":"31.3","Sequence Similarity":"49.33","level":0}
+		,{"id":6,"Model Type":"Modeller","Evaluator":"Whatcheck","Score":9,"PDB":"CXD4_MOUSE.B99990020.pdb","Alignment":"Alineamiento-CX39 (modified).fasta","Sequence Identity":"31.3","Sequence Similarity":"49.33","level":1,"parent_id":2,"isLeaf":true}
+		,{"id":7,"Model Type":"Modeller","Evaluator":"Whatcheck","Score":8,"PDB":"CXD4_MOUSE.B99990168.pdb","Alignment":"Alineamiento-CX39 (modified).fasta","Sequence Identity":"31.3","Sequence Similarity":"49.33","level":1,"parent_id":2,"isLeaf":true}
+		,{"id":8,"Model Type":"Modeller","Evaluator":"Whatcheck","Score":7,"PDB":"CXD4_MOUSE.B99990107.pdb","Alignment":"Alineamiento-CX39 (modified).fasta","Sequence Identity":"31.3","Sequence Similarity":"49.33","level":1,"parent_id":2,"isLeaf":true}
+		,{"id":9,"Model Type":"Modeller","Evaluator":"Whatcheck","Score":6,"PDB":"CXD4_MOUSE.B99990140.pdb","Alignment":"Alineamiento-CX39 (modified).fasta","Sequence Identity":"31.3","Sequence Similarity":"49.33","level":1,"parent_id":2,"isLeaf":true}
+		,{"id":10,"Model Type":"Modeller","Evaluator":"Whatcheck","Score":5,"PDB":"CXD4_MOUSE.B99990346.pdb","Alignment":"Alineamiento-CX39 (modified).fasta","Sequence Identity":"31.3","Sequence Similarity":"49.33","level":1,"parent_id":2,"isLeaf":true}
+		,{"id":11,"Model Type":"Modeller","Evaluator":"Whatcheck","Score":4,"PDB":"CXD4_MOUSE.B99990477.pdb","Alignment":"Alineamiento-CX39 (modified).fasta","Sequence Identity":"31.3","Sequence Similarity":"49.33","level":1,"parent_id":2,"isLeaf":true}
+		,{"id":12,"Model Type":"Modeller","Evaluator":"Whatcheck","Score":3,"PDB":"CXD4_MOUSE.B99990828.pdb","Alignment":"Alineamiento-CX39 (modified).fasta","Sequence Identity":"31.3","Sequence Similarity":"49.33","level":1,"parent_id":2,"isLeaf":true}
+		,{"id":13,"Model Type":"Modeller","Evaluator":"Whatcheck","Score":2,"PDB":"CXD4_MOUSE.B99990887.pdb","Alignment":"Alineamiento-CX39 (modified).fasta","Sequence Identity":"31.3","Sequence Similarity":"49.33","level":1,"parent_id":2,"isLeaf":true}
+		,{"id":14,"Model Type":"Modeller","Evaluator":"Whatcheck","Score":1,"PDB":"CXD4_MOUSE.B99990771.pdb","Alignment":"Alineamiento-CX39 (modified).fasta","Sequence Identity":"31.3","Sequence Similarity":"49.33","level":1,"parent_id":2,"isLeaf":true}
+		,{"id":4,"Model Type":"Modeller+Lipid","Evaluator":"","Score":,"PDB":"AA_HC_CX39_lipids.pdb","Alignment":"","Sequence Identity":"0","Sequence Similarity":"0"}
+	]
+}

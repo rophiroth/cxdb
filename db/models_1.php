@@ -71,56 +71,58 @@ else{
     $GLOBALS[$pid.'Models'] = $result;
 }
 // we should set the appropriate header information. Do not forget this.
-//header("Content-type: text/xml;charset=utf-8");
+header("Content-type: text/xml;charset=utf-8");
  
-$s = "{\n\r\"rows\":\n[";
+$s = "<?xml version='1.0' encoding='utf-8'?>";
+$s .=  "<rows>";
+$s .= "<page>".$page."</page>";
+$s .= "<total>".$total_pages."</total>";
+$s .= "<records>".$count."</records>";
  
 // be sure to put text data in CDATA
-$firstRow = true;
-$modelTypes = array();
-$parentIndex = 0; //index of the last line of the last parent row, used to add parent specifict string for treegrid
 while($row = mysql_fetch_array($result,MYSQL_ASSOC)) {
     if($row['Protein ID'] == $pid){
-        //check first row or not to put ,
-        if($firstRow){
-            $firstRow=false;
-        }else{ $s .= ","; }
-        
-        $s .= "{\"id\":". $row['id'].",";            
-        $s .= "\"Model Type\":\"". $row['Model Type']."\",";
-        $s .= "\"Evaluator\":\"". $row['Evaluator']."\",";
-        $s .= "\"Score\":\"". $row['Score']."\",";
-        $s .= "\"PDB\":\"". $row['PDB']."\",";
-        $s .= "\"Alignment\":\"". $row['Alignment']."\",";
-        $s .= "\"Sequence Identity\":\"". $row['Sequence Identity']."\",";
-        $s .= "\"Sequence Similarity\":\"". $row['Sequence Similarity']."\"";
-
-        //Check Model type to group them, use first row of each model type to group
-        if(!in_array($row['Model Type'],$modelTypes,true)){
-            
-            $modelTypes[]= $row['Model Type'];
-            $parentIndex=strlen($s);
-//            echo $parentIndex;
-            //$s .= ",\"level\":0";
+        $s .= "<row id='". $row['id']."'>";            
+        $s .= "<cell>false</cell>"; //false to leave unchecked the select combobox workaround
+        $s .= "<cell>". $row['id']."</cell>";
+        //$s .= "<cell>". $row['Protein ID']."</cell>";
+        $s .= "<cell>". $row['Model Type']."</cell>";
+        $s .= "<cell>". $row['Evaluator']."</cell>";
+        $s .= "<cell>". $row['Score']."</cell>";
+        $s .= "<cell>". $row['PDB']."</cell>";
+        $s .= "<cell>". $row['Alignment']."</cell>";
+        $s .= "<cell>". $row['Sequence Identity']."</cell>";
+        $s .= "<cell>". $row['Sequence Similarity']."</cell>";
+        $s .= "<cell />";//alignment view btn
+        $s .= "<cell />";//3d model view btn
+        if($row['id'] == 0){
+            $GLOBALS['parent']=$row['id'];
+            $s .= "<cell>0</cell>";
+            $s .= "<cell>NULL</cell>";
+            $s .= "<cell>false</cell>";
+            $s .= "<cell><isLeaf>true</isLeaf></cell>";
+            $s .= "<cell>true</cell>";
         }
-        else
+        else if($row['id'] >= 6)
         {
-            if($parentIndex >0){
-                $s = substr_replace($s,",\"level\":0",$parentIndex,0);
-//                echo $parentIndex." AAAA";
-                $parentIndex = -1;
-            }
-            $s .= ",\"level\":1,";
-            $s .= "\"parent_id\":\"0\",";
-            $s .= "\"isLeaf\":true";
+            $s .= "<cell>1</cell>";
+            $s .= "<cell>2</cell>";
+            //$s .= "<cell>".$GLOBALS['parent']."</cell>";
+            //$s .= "<cell>0</cell>";
+            $s .= "<cell>true</cell>";
+            //$s .= "<cell>true</cell>";
+            //$s .= "<cell>true</cell>";
+        }else{
+            $s .= "<cell></cell>";
+            $s .= "<cell></cell>";
+            $s .= "<cell></cell>";
+            $s .= "<cell>false</cell>";
+            $s .= "<cell>true</cell>";
         }
-
         //$s .= "<cell>". getArrayText($row['isHeteromeric'], $row['isHeterotipic'])."</cell>";
-        $s .= "}";
+        $s .= "</row>";
     }
 }
-$s .= "]}"; 
+$s .= "</rows>"; 
  
-//echo json_decode($s);
-//echo json_encode( array( array('xd'),'asd','2') );
 echo $s;

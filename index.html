@@ -25,18 +25,20 @@
     <style type="text/css">
 
         /* set the size of the datepicker search control for Order Date*/
-        #ui-datepicker-div { font-size:11px; }
+        /*#ui-datepicker-div { font-size:14px; }*/
         
         /* set the size of the autocomplete search control*/
-        .ui-menu-item {
-            font-size: 11px;
-        }
+        /*.ui-menu-item { font-size: 14px; }*/
 
-         .ui-autocomplete {
-            font-size: 11px;
-        }
+         /*.ui-autocomplete { font-size: 14px; }*/
         //ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable ui-resizable{ width: auto; maxwidth: 900px}
-
+        .ui-jqgrid-sortable{font-size:14px !important;}
+        .ui-jqgrid tr.jqgrow td {font-size:13px !important;}
+        //.ui-search-toolbar{font-size:19px;} .ui-jqgrid-htable{font-size:19px;}
+        //.ui-widget-content ui-corner-all{font-size:19px;}
+        //.ui-search-input{font-size:13px;}
+        //.ui-search-table{font-size:13px;}
+        /*.ui-widget-content.ui-corner-all{ font-size:14px !important;}*/
     </style>
 
     <table id="jqGrid"></table>
@@ -45,8 +47,14 @@
         <!--<iframe id="pvDialogFrame" src="js/pv/index.html" width="600" height="500"></iframe>-->
         <iframe id="pvDialogFrame" width="500" height="530"></iframe>
     </div>
+    <div id="pvDialogAlignment" title="Alignment" hidden >
+        <!--<iframe id="pvDialogFrame" src="js/pv/index.html" width="600" height="500"></iframe>-->
+        <iframe id="pvDialogAlignmentFrame" width="750" height="530"></iframe>
+    </div>
     <input type="button" value="Download Selected Models" onclick="downloadSelecteds()" />
     <div id="downloader"></div>
+    <!--BUSQUEDA EXTERNA ESPECIFICA-->
+    <input type="button" value="Search" onclick="searchModel()" />
 <!--    zip scripts-->
 <!--    <script type="text/javascript" src="js/zip.js"></script>
     <script type="text/javascript" src="js/simpleZip.js"></script>
@@ -65,26 +73,24 @@
                 datatype: 'xml',
                 page: 1,
                 colModel: [
-                    {   label : "id",sorttype: 'integer',name: 'id',hidden:false,width: 150,editable: true},
-                    {   label : "Name",name: 'Name',key: false,width: 150,editable: true,
-                        stype: "select",searchoptions: { value: ":All"+fillOptions("name") }
-                    },
-                    {   label : "Family",name: 'Family',width: 150,editable: true},
-                    {   label : "Structure Type",name: 'Structure Type',width: 150,editable: true},
-                    {   label : "Organism",name: 'Organism',width:150,editable: true },
-                    {   label : "Array",name: 'Array',width: 150,editable: true },
+                    {   label : "id",sorttype: 'integer',name: 'id',hidden:true,width: 150,editable: true},
+                    {   label : "Name",name: 'Name',key: false,width: 150,editable: true,stype: "text",searchoptions: { value: ":All" }},
+                    {   label : "Family",name: 'Family',width: 150,editable: true,stype: "select",searchoptions: { value: ":All" }},
+                    {   label : "Structure Type",name: 'Structure Type',width: 150,editable: true,stype: "select",searchoptions: { value: ":All" }},
+                    {   label : "Organism",name: 'Organism',width:100,editable: true,stype: "select",searchoptions: { value: ":All" }},
+                    {   label : "Array",name: 'Array',width: 180,editable: true,stype: "select",searchoptions: { value: ":All" }},
                     {   label : "Description",name: 'Description', width: 150,editable: true,autowidth: true,hidden:true},
                 ],
 		loadonce: true,
 		viewrecords: true,
-                width: '150%',
+                width: 1100,
                 height: 550,
                 rowNum: 10,
                 shrinkToFit: true,
                 subGrid: true, // set the subGrid property to true to show expand buttons for each row
-                onSelectRow: onSelectRow,
+                onSelectRow:  function (rowId) { $(this).jqGrid ('toggleSubGridRow', rowId);},
                 subGridRowExpanded: showChildGrid, // javascript function that will take care of showing 
-                subGridOptions : {expandOnLoad: false,reloadOnExpand :false,selectOnExpand : true },// expand all rows on load
+                subGridOptions : {expandOnLoad: true,reloadOnExpand :false,selectOnExpand : false },// expand all rows on load
                 pager: "#jqGridPager",
                 loadComplete: function() {
 //                    var grid = $("#jqGrid");
@@ -94,10 +100,43 @@
 //                            $(value).unbind('click').html('');
 //                        }
 //                    });
+                    $("#jqGrid").jqGrid('setColProp', 'Name', {
+                        searchoptions: {
+                            sopt:['cn'],
+                            dataInit: function(elem) {
+                                $(elem).autocomplete({
+                                    source:getUniqueColumnValues('Name'),
+                                    delay:0,minLength:0,multiple:true,
+                                    select: function (event, ui) {$(elem).trigger('keydown');$(elem).val(ui.item.value);}
+                                });
+                            }
+                        }
+                    });
+                    $("#jqGrid").jqGrid('filterToolbar',{stringResult:true,autosearch:true,searchOnEnter:false,defaultSearch:"cn"});
+                    if(!isFilled)
+                    {
+                        //fillOptions('Name');
+                        fillOptions('Family');
+                        fillOptions('Structure Type');
+                        fillOptions('Organism');
+                        fillOptions('Array');
+                    }
+                    
+                    //testing shits
+                    var rowIds = $("#jqGrid").getDataIDs();
+                    $.each(rowIds, function (index, rowId) {
+                    $("#jqGrid").collapseSubGridRow(rowId);                   
+                });
                 }
             });
 			// activate the toolbar searching
-            $('#jqGrid').jqGrid('filterToolbar');
+            //$('#jqGrid').jqGrid('filterToolbar');
+            $("#jqGrid").jqGrid('gridResize');
+            //add tooltip to header
+            tooltip="Click to sort";
+            $('.ui-th-column').each(function() { $(this).attr('alt',tooltip).attr('title',tooltip); });
+            //expansion row tooltip
+            $("#jqGrid").attr('title',"Click to expand or close model subgrid");
 	   /* $('#jqGrid').jqGrid('navGrid',"#jqGridPager", {                
                 search: true, // show search button on the toolbar
                 add: true,
@@ -127,22 +166,62 @@
                     }
                 });*/
         });
+        var isFilled = false;
         //function to fill select box with actual column data (what else?! :P)
         function fillOptions(column)
         {
+            //alert("asd");
+            
+            //alert(r);
+            var select = document.getElementById('gs_'+column);
+            var r = getUniqueColumnValues(column);
+            //alert(r);
+            if(r.length>1)
+                for (var v in r)
+                {
+                    //alert(r[v]);
+//                    alert(v);
+                    select.options[1+parseInt(v)] = new Option(r[v],r[v],false,false);
+                }
+            else
+                select.parentNode.parentNode.hidden=true;
+            isFilled = true;
+            //return '';
+        }
+        
+        function getUniqueColumnValues(column)
+        {
             //get column values and fill text separated by coma
-            return "";
+            var res = $("#jqGrid").jqGrid('getCol', column);
+            //alert(res);
+            return res.filter(function(itm,i,a){
+                return i==a.indexOf(itm);
+            });
         }
 
         //popup3dmodel function
-        function show3dModel(pdb){
-            //alert(pdb);
+        function show3dModel(pdb,url){
+            alert(url);
+            if(typeof url == 'undefined')
+                url="js/jsmol/index.php?pdb=";
             $(function(){$("#pvDialog").dialog();});                    
             //$( "#pvDialog" ).hidden = false;
             
             //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+pdb);
             $( "#pvDialog" ).parent().css( "width", "auto");
-            $( "#pvDialogFrame").attr('src',"js/jsmol/index.php?pdb="+pdb);
+            $( "#pvDialogFrame").attr('src',url+pdb);
+        }
+        
+        function showAlign(pdb,url){
+            alert(url);
+            if(typeof url == 'undefined')
+                url="js/jsmol/index.php?pdb=";
+            $(function(){$("#pvDialogAlignment").dialog();});                    
+            //$( "#pvDialog" ).hidden = false;
+            
+            //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+pdb);
+            $( "#pvDialogAlignment" ).parent().css( "width", "auto");
+            $( "#pvDialogAlignmentFrame").attr('src','http://strap.charite.de/aaBeta/aa.php?beforeAC=load%20http://146.83.236.8/alignment.fasta&afterAC=set_color_mode+zappo%0Aset_conservation_threshold+90');
         }
         // the event handler on expanding parent row receives two parameters
         // the ID of the grid tow  and the primary key of the row
@@ -157,48 +236,59 @@
             //childGridURL = childGridURL + "&parentRowID=" + encodeURIComponent(parentRowKey)
             actualSubGrid = childGridID;
             // add a table and pager HTML elements to the parent grid row - we will render the child grid here
-            $('#' + parentRowID).append('<table id=' + childGridID + '></table><div id=' + childGridPagerID + ' class=scroll></div>');
+            $('#' + parentRowID).append('<table id=' + childGridID + ' title="click to sort"></table><div id=' + childGridPagerID + ' class=scroll></div>');
             $("#" + childGridID).jqGrid({
-                url: childGridURL,
-                //url: 'db/db.php',
+//                url: childGridURL,
+                url: 'db/models.php?pid='+pid,
                 mtype: "GET",
                 datatype: "json",
                 //datatype: "xml",
                 page: 1,
                 colModel: [
-                    { label:' ',index:'select',name:'select',edittype:'checkbox',hidden:false,editable:true,width:15,search:false,formatter: "checkbox",formatoptions:{disabled:false}},
-                    { label: 'ID', name: 'id', key: true, width: 70, editable: true,formatter: function formatId(cellValue, options, rowObject) {
-                    return parseInt(cellValue).toString(36)+parseInt(pid).toString(36); } },
-                    { label: 'Model Type', name: 'Model Type', width: 75, editable: true },
-                    { label: 'Evaluator', name: 'Evaluator', width: 75, editable: true },
-                    { label: 'Score', name: 'Score', width: 70,search:false, editable: true },
-                    { label: 'PDB', name: 'PDB', width: '160%',search:false, editable: true,formatter: formatLink, autowidth: true },
-                    { label: 'PSF', name: 'PSF', width: '150%',search:false, editable: true,formatter: formatLink, autowidth: true,hidden: true },
-                    { label: "3D Model", name: "PDB",width: 55,align:'center',search:false,editable:false,hidden: false,
+                    { label:' ',index:'select',name:'select',edittype:'checkbox',hidden:false,editable:true,width:15,search:false,formatter: "checkbox",formatoptions:{disabled:false},cellattr: function () { return ' title="Click to select models and then press Download button for bulk download"'; }},
+                    { label: 'ID', name: 'id', key: true, width: 70,align:'center',search:false, editable: true,formatter: function formatId(cellValue, options, rowObject) {
+                    return ('0000'+parseInt(cellValue).toString(36)+parseInt(pid).toString(36)).slice(-4); } },
+                    { label: 'Model Type', name: 'Model Type', width: 100,search:false, editable: true,cellattr:function(){return' title="Click triangle to expand"'; } },
+                    { label: 'Evaluator', name: 'Evaluator', width: 75,search:false, editable: true },
+                    { label: 'Score', name: 'Score', width: 70,align:'center',search:false, editable: true },
+                    { label: 'PDB', name: 'PDB', width: '180%',search:false, editable: true,formatter: formatLink, autowidth: true },
+                    { label: 'Alignment', name: 'Alignment', width: '150%',search:false, editable: true,formatter: formatLink, autowidth: true,hidden: false },
+                    { label: 'Seq Identity', name: 'Sequence Identity',align:'center', width: 80,search:false, editable: true,formatter: addPercent, autowidth: true,hidden: false },
+                    { label: 'Seq Similarity', name: 'Sequence Similarity',align:'center', width: 75,search:false, editable: true,formatter: addPercent, autowidth: true,hidden: false },
+                    { label: "View Alignment", name: "PDB",width: 75,align:'center',search:false,editable:false,hidden: false,
                         formatter: function(cellValue, options, rowObject){
                             //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+parentRowKey+"/"+cellValue);
                             //$( "#pvDialogFrame" ).attr('src','js/jsmol/index.php?pdb='+parentRowKey+"/"+cellValue);
-                            return "<input type='button' value='view' View 3d model' onclick='show3dModel(\""+parentRowKey+"/"+cellValue+"\")'\>";
+//                            return "<input type='button' value='view' title='Click to view an alignment comparison on a popup' onclick='show3dModel(\""+parentRowKey+"/"+cellValue+"\")'\>";
+                            return "<input type='button' value='view' title='Click to view an alignment comparison on a popup' onclick='showAlign()'\>";
                         }
                     },
+                    { label: "3D Model", name: "PDB",width: 75,align:'center',search:false,editable:false,hidden: false,
+                        formatter: function(cellValue, options, rowObject){
+                            //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+parentRowKey+"/"+cellValue);
+                            //$( "#pvDialogFrame" ).attr('src','js/jsmol/index.php?pdb='+parentRowKey+"/"+cellValue);
+                            return "<input type='button' value='view' title='Click view 3d model on a popup' onclick='show3dModel(\""+parentRowKey+"/"+cellValue+"\")'\>";
+                        }
+                    },
+                    //{ name: 'level', hidden: true },{ name: 'parent_id', hidden: true },{ name: 'isLeaf', hidden: true },{ name: 'expanded', hidden: true }
                 ],
 		loadonce: true,
                 width: '100%',
                 height: '100%',
-                shrinkToFit: false,
+                shrinkToFit: true,
                 treeGrid: true,
-                ExpandColumn: 'Model Type',
+                ExpandColumn: 'Model Type',ExpandColClick:true,
                 multiselect: true,
                 onSelectRow: onSelectRow,
                 treeGridModel:"adjacency",
                 teedatatype:"json",
                 treeReader:{
-					"parent_id_field":"parent",
-					"level_field":"level",
-					"leaf_field":"isLeaf",
-					"expanded_field":"expanded",
-					"loaded":"loaded",
-					"icon_field":"icon"
+                    parent_id_field:"parent_id",
+                    level_field:"level",
+                    leaf_field:"isLeaf",
+                    expanded_field:"expanded",
+                    loaded:"loaded",
+                    icon_field:"icon"
 		},
                 loadComplete: function () {
                     var getColumnIndexByName = function(grid, columnName) {
@@ -212,10 +302,11 @@
                     };
                     var iCol = getColumnIndexByName($(this), 'select'), rows = this.rows, i,
                         c = rows.length;
-                        this.
+                
                     for (i = 1; i < c; i += 1) {
                         $(('input[type="checkbox"]'),rows[i].cells[iCol]).click(function (e) {
                             var row = $(e.target).closest('tr')[0];
+                            
                             var id = row.id,isChecked = $(e.target).is(':checked');
                             var pdb=row.cells[5].firstChild,psf=row.cells[6].firstChild;
                             
@@ -232,7 +323,7 @@
 //                                setDownlodeable(isChecked,psf.valueOf());
                         });
                     }
-                } 
+                }
                 //pager: "#" + childGridPagerID
             });
 
@@ -275,7 +366,16 @@
                     //alert("value: "+div.getElementsByTagName(link.name));
                 }
             }
-            $("#" + childGridID).jqGrid('filterToolbar');
+            //UNCOMMENT TO ADD FILTER FUNCTION
+            //$("#" + childGridID).jqGrid('filterToolbar');
+            //COMMENT TO DISABLE RESIZE 
+            $("#" + childGridID).jqGrid('gridResize');
+            //add tooltip to header
+            tooltip="Click to sort";
+            $('.ui-th-column').each(function() { $(this).attr('alt',tooltip).attr('title',tooltip); });
+            //tooltip="Click to expand or close model subgrid";
+            //$('.ui-tree-wrap').each(function() { alert("XD"); $(this).attr('alt',tooltip).attr('title',tooltip); });
+            
             //UNCOMMENT TO ENABLE PAGER!
             /*$("#" + childGridID).jqGrid('navGrid',"#"+childGridPagerID, {      //bottom navbar, commented to disable it          
                 search: true, // show search button on the toolbar
@@ -307,8 +407,14 @@
                 }); */   
         //});
             function formatLink(cellValue, options, rowObject) {
-                if( cellValue !== '' )
+                if( cellValue !== '' && cellValue !== 'undefined' )
                     return "<a id=\""+cellValue+"\" download href='" +"proteinModels/"+parentRowKey+"/"+ cellValue + "'>"+cellValue+ "</a>";
+                else
+                    return '';
+            };
+            function addPercent(cellValue, options, rowObject) {
+                if( cellValue !== '' )
+                    return cellValue+"%";
                 else
                     return '';
             };
@@ -376,9 +482,23 @@
                 //$("#"+link.id).multiDownload();
         }
         //replaced with a dusty solution
-        function onSelectRow(id)
+        function onSelectRow(id,status,e)
         {
-            //alert(id);
+            $('#'+id)[0].firstChild.firstChild.click();
+        }
+        
+        function searchModel() {
+//            $('#jqGrid_cx39').jqGrid('resetSelection');
+//            $('#jqGrid').jqGrid ('setSelection', 'cx26', false);
+            var selected = $('#jqGrid_cx39_table').jqGrid('setSelection','0',false);
+            if(selected){
+                alert(selected);
+                $('#jqGrid').jqGrid ('expandSubGridRow', 'cx39');
+                $('#jqGrid_cx39_table').jqGrid('expandRow',selected);
+//                $('#jqGrid_cx39_table').jqGrid('expandNode',selected);
+
+                            }
+//                alert( $('#jqGrid_cx39').jqGrid('getSelection') );
         }
     </script>
 </body>
