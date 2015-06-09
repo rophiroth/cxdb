@@ -40,7 +40,9 @@
         //.ui-search-table{font-size:13px;}
         /*.ui-widget-content.ui-corner-all{ font-size:14px !important;}*/
     </style>
-
+    <!--BUSQUEDA EXTERNA ESPECIFICA-->
+    <input type="text" value="txtSearch" />
+    <input type="button" value="Search" onclick="searchModel('7')" />
     <table id="jqGrid"></table>
     <div id="jqGridPager"></div>
     <div id="pvDialog" title="3D Model" hidden >
@@ -53,8 +55,6 @@
     </div>
     <input type="button" value="Download Selected Models" onclick="downloadSelecteds()" />
     <div id="downloader"></div>
-    <!--BUSQUEDA EXTERNA ESPECIFICA-->
-    <input type="button" value="Search" onclick="searchModel()" />
 <!--    zip scripts-->
 <!--    <script type="text/javascript" src="js/zip.js"></script>
     <script type="text/javascript" src="js/simpleZip.js"></script>
@@ -487,18 +487,34 @@
             $('#'+id)[0].firstChild.firstChild.click();
         }
         
-        function searchModel() {
-//            $('#jqGrid_cx39').jqGrid('resetSelection');
-//            $('#jqGrid').jqGrid ('setSelection', 'cx26', false);
-            var selected = $('#jqGrid_cx39_table').jqGrid('setSelection','0',false);
-            if(selected){
-                alert(selected);
-                $('#jqGrid').jqGrid ('expandSubGridRow', 'cx39');
-                $('#jqGrid_cx39_table').jqGrid('expandRow',selected);
-//                $('#jqGrid_cx39_table').jqGrid('expandNode',selected);
-
-                            }
-//                alert( $('#jqGrid_cx39').jqGrid('getSelection') );
+        function searchModel(id) {
+            //select
+            var data = $("#jqGrid").jqGrid('getGridParam', 'data');
+            for (var i = 0; i < data.length; i++) {
+                //check into subgrid
+//                alert(data[i].Name);
+                var sData = $("#jqGrid_"+data[i].Name+"_table").jqGrid('getGridParam', 'data');
+                for (var j = 0; j < sData.length; j++) {
+//                    alert(sData[j].id);
+                    if( (sData[j].id+"").indexOf(id) > -1 ){
+                        selectAndExpand(data[i].Name,sData[j].id);
+//                        alert("abuscar!");
+                    }
+                    
+                }
+            }
+        }
+        
+        function selectAndExpand(table,id)
+        {
+            var pGrid = '#jqGrid_'+table+'_table';
+            $(pGrid).jqGrid('setSelection',id,false);
+            $('#jqGrid').jqGrid ('expandSubGridRow', table);
+            var sel =$(pGrid).jqGrid('getLocalRow',id);
+            
+            var row = $("#jqGrid_cx39_table").jqGrid("getNodeParent",sel);
+            $(pGrid).jqGrid('expandRow', row);
+            $(pGrid).jqGrid('expandNode', row);
         }
     </script>
 </body>
