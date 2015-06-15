@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <!-- The jQuery library is a prerequisite for all jqSuite products -->
@@ -14,10 +13,11 @@
     <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.css" />
     <script src="js/jquery-ui.min.js"></script>
     <!-- The link to the CSS that the grid needs -->
-    <link rel="stylesheet" type="text/css" media="screen" href="css/trirand/ui.jqgrid.css" />
+    <link type="text/ecmascript" rel="stylesheet" type="text/css" media="screen" href="css/trirand/ui.jqgrid.css" />
 <!--    jquery shits-->
-<!--    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">-->
-    <!--<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
+    <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">-->
+    <script type="text/ecmascript" src="js/jquery-ui.js"></script>
+    <script type="text/ecmascript" src="js/jquery-1.10.2.js"></script>
 
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <title>The protein DB model grid</title>
@@ -42,8 +42,14 @@
         /*.ui-widget-content.ui-corner-all{ font-size:14px !important;}*/
     </style>
     <!--BUSQUEDA EXTERNA ESPECIFICA-->
-    <input type="text" id="txtSearch" onkeypress="return txtSearchEnter(this,event);"/>
-    <input type="button" value="Search" onclick="searchModel(document.getElementById('txtSearch').value)" />
+    <div id="searchDiv" style="height: '100%'; width: 1100px;" title="Click to see advanced search options.">
+        <h3>Direct Model Search</h3>
+        <div>
+            <input type="text" id="txtSearch" onkeypress="return txtSearchEnter(this,event);" />
+            <input type="button" value="Search" onclick="searchModel(document.getElementById('txtSearch').value)" />
+        </div>
+    </div><br />
+
     <table id="jqGrid"></table>
     <div id="jqGridPager"></div>
     <div id="pvDialog" title="3D Model" hidden >
@@ -72,7 +78,7 @@
         //alert(parseInt('ZZ',36)+" "+(parseInt(1295)).toString(36));
         var files = [];
         $(document).ready(function () {
-            //DOWNLOADER FORM
+            //###DOWNLOADER FORM
             $('#downloadForm').ajaxForm({data:{files:files},beforeSubmit: function(){
                     if(files.length >0)
                     {
@@ -96,8 +102,15 @@
                 document.getElementById("loading").hidden = true;
             }}); 
 //            $('#downloadForm').ajaxForm(callDownloadHelper);
+            //###SEARCHDIV
+
+            $( "#searchDiv" ).accordion({
+                    collapsible: true,
+                    active: false
+            });
             
-            //JQGRID
+            
+            //###JQGRID
             $("#jqGrid").jqGrid({
                 //url: 'db/data.json',
                 editurl: 'clientArray',
