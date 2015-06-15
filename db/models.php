@@ -60,7 +60,7 @@ $start = $limit*$page - $limit;
 // typical case is that the user type 0 for the requested page 
 if($start <0) $start = 0; 
  
-if($loadOnce && $GLOBALS[$pid.'Models']!=null)
+if($loadOnce && isset($GLOBALS[$pid.'Models']) && $GLOBALS[$pid.'Models']!=null)
 {
     $result = $GLOBALS[$pid.'Models'];
 }
@@ -94,10 +94,8 @@ while($row = mysql_fetch_array($result,MYSQL_ASSOC)) {
         $s .= "\"Alignment\":\"". $row['Alignment']."\",";
         $s .= "\"Sequence Identity\":\"". $row['Sequence Identity']."\",";
         $s .= "\"Sequence Similarity\":\"". $row['Sequence Similarity']."\"";
-
         //Check Model type to group them, use first row of each model type to group
         if(!in_array($row['Model Type'],$modelTypes,true)){
-            
             $modelTypes[]= $row['Model Type'];
             $parentIndex=strlen($s);
 //            echo $parentIndex;

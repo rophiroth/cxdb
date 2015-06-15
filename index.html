@@ -4,6 +4,7 @@
 <head>
     <!-- The jQuery library is a prerequisite for all jqSuite products -->
     <script type="text/ecmascript" src="js/jquery.min.js"></script> 
+    <script type="text/ecmascript" src="js/jquery.form.js"></script> 
     <!-- This is the Javascript file of jqGrid -->   
     <script type="text/ecmascript" src="js/trirand/jquery.jqGrid.min.js"></script>
     <!-- This is the localization file of the grid controlling messages, labels, etc.
@@ -11,17 +12,17 @@
     <script type="text/ecmascript" src="js/trirand/i18n/grid.locale-en.js"></script>
     <!-- A link to a jQuery UI ThemeRoller theme, more than 22 built-in and many more custom -->
     <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.css" />
+    <script src="js/jquery-ui.min.js"></script>
     <!-- The link to the CSS that the grid needs -->
     <link rel="stylesheet" type="text/css" media="screen" href="css/trirand/ui.jqgrid.css" />
 <!--    jquery shits-->
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<!--    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">-->
+    <!--<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
 
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <title>The protein DB model grid</title>
 </head>
 <body>
-
     <style type="text/css">
 
         /* set the size of the datepicker search control for Order Date*/
@@ -41,8 +42,8 @@
         /*.ui-widget-content.ui-corner-all{ font-size:14px !important;}*/
     </style>
     <!--BUSQUEDA EXTERNA ESPECIFICA-->
-    <input type="text" value="txtSearch" />
-    <input type="button" value="Search" onclick="searchModel('7')" />
+    <input type="text" id="txtSearch" onkeypress="return txtSearchEnter(this,event);"/>
+    <input type="button" value="Search" onclick="searchModel(document.getElementById('txtSearch').value)" />
     <table id="jqGrid"></table>
     <div id="jqGridPager"></div>
     <div id="pvDialog" title="3D Model" hidden >
@@ -53,17 +54,50 @@
         <!--<iframe id="pvDialogFrame" src="js/pv/index.html" width="600" height="500"></iframe>-->
         <iframe id="pvDialogAlignmentFrame" width="750" height="530"></iframe>
     </div>
-    <input type="button" value="Download Selected Models" onclick="downloadSelecteds()" />
+<!--    <input type="button" value="Download Selected Models" onclick="downloadSelecteds()" />-->
+    <form id="downloadForm" action="php/downloaderHelper.php" method="post">
+        <!--<input type="text" id="selectedFiles" name="files" hidden>-->
+        <input id="downloadBtn" type="submit" value="Download Selected Models">
+        <div id="loading" hidden>Loading Please Wait....<img src="css/images/ajax-loader.gif" alt="Searching" /></div>
+    </form>
     <div id="downloader"></div>
 <!--    zip scripts-->
 <!--    <script type="text/javascript" src="js/zip.js"></script>
     <script type="text/javascript" src="js/simpleZip.js"></script>
     <script type="text/javascript" src="js/FileSaver.js"></script>-->
     <script src="js/jquery-multidownload/jquery-multidownload.js"></script>
+    <!--//PHP INCLUDES-->
+    <?php include 'includes.php';?>
     <script type="text/javascript"> 
         //alert(parseInt('ZZ',36)+" "+(parseInt(1295)).toString(36));
-    
+        var files = [];
         $(document).ready(function () {
+            //DOWNLOADER FORM
+            $('#downloadForm').ajaxForm({data:{files:files},beforeSubmit: function(){
+                    if(files.length >0)
+                    {
+//                        alert(files);
+                        document.getElementById("loading").hidden = false;
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                ,success: function(r) {
+                alert("url: "+r); 
+                var link = document.createElement("a");
+                link.id=r;
+                link.download ='';
+                link.name = r;
+                link.href = r;
+//                link.click();
+                document.getElementById("loading").hidden = true;
+            }}); 
+//            $('#downloadForm').ajaxForm(callDownloadHelper);
+            
+            //JQGRID
             $("#jqGrid").jqGrid({
                 //url: 'db/data.json',
                 editurl: 'clientArray',
@@ -91,7 +125,7 @@
                 onSelectRow:  function (rowId) { $(this).jqGrid ('toggleSubGridRow', rowId);},
                 subGridRowExpanded: showChildGrid, // javascript function that will take care of showing 
                 subGridOptions : {expandOnLoad: true,reloadOnExpand :false,selectOnExpand : false },// expand all rows on load
-                pager: "#jqGridPager",
+//                pager: "#jqGridPager",
                 loadComplete: function() {
 //                    var grid = $("#jqGrid");
 //                    var subGridCells = $("td.sgcollapsed",grid[0]);
@@ -201,7 +235,7 @@
 
         //popup3dmodel function
         function show3dModel(pdb,url){
-            alert(url);
+//            alert(url);
             if(typeof url == 'undefined')
                 url="js/jsmol/index.php?pdb=";
             $(function(){$("#pvDialog").dialog();});                    
@@ -209,19 +243,23 @@
             
             //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+pdb);
             $( "#pvDialog" ).parent().css( "width", "auto");
+//            alert(url+pdb);
             $( "#pvDialogFrame").attr('src',url+pdb);
         }
         
         function showAlign(pdb,url){
-            alert(url);
-            if(typeof url == 'undefined')
-                url="js/jsmol/index.php?pdb=";
+//            alert(url);
+//            if(typeof url == 'undefined')
+//                url="js/jsmol/index.php?pdb=";
+//alert(pdb);
             $(function(){$("#pvDialogAlignment").dialog();});                    
             //$( "#pvDialog" ).hidden = false;
             
             //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+pdb);
             $( "#pvDialogAlignment" ).parent().css( "width", "auto");
-            $( "#pvDialogAlignmentFrame").attr('src','http://strap.charite.de/aaBeta/aa.php?beforeAC=load%20http://146.83.236.8/alignment.fasta&afterAC=set_color_mode+zappo%0Aset_conservation_threshold+90');
+//            $( "#pvDialogAlignmentFrame").attr('src','http://strap.charite.de/aaBeta/aa.php?beforeAC=load%20http://146.83.236.8/alignment.fasta&afterAC=set_color_mode+zappo%0Aset_conservation_threshold+90');
+//alert('http://localhost/aa/aa.php?beforeAC=load%20http://localhost/cxGrid/proteinModels/'+pdb+'&afterAC=set_color_mode+zappo%0Aset_conservation_threshold+90');
+            $( "#pvDialogAlignmentFrame").attr('src','http://localhost/aa/aa.php?beforeAC=load%20http://localhost/cxGrid/proteinModels/'+pdb+'&afterAC=set_color_mode+zappo%0Aset_conservation_threshold+90');
         }
         // the event handler on expanding parent row receives two parameters
         // the ID of the grid tow  and the primary key of the row
@@ -255,12 +293,12 @@
                     { label: 'Alignment', name: 'Alignment', width: '150%',search:false, editable: true,formatter: formatLink, autowidth: true,hidden: false },
                     { label: 'Seq Identity', name: 'Sequence Identity',align:'center', width: 80,search:false, editable: true,formatter: addPercent, autowidth: true,hidden: false },
                     { label: 'Seq Similarity', name: 'Sequence Similarity',align:'center', width: 75,search:false, editable: true,formatter: addPercent, autowidth: true,hidden: false },
-                    { label: "View Alignment", name: "PDB",width: 75,align:'center',search:false,editable:false,hidden: false,
+                    { label: "View Alignment", name: "Alignment",width: 75,align:'center',search:false,editable:false,hidden: false,
                         formatter: function(cellValue, options, rowObject){
                             //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+parentRowKey+"/"+cellValue);
                             //$( "#pvDialogFrame" ).attr('src','js/jsmol/index.php?pdb='+parentRowKey+"/"+cellValue);
 //                            return "<input type='button' value='view' title='Click to view an alignment comparison on a popup' onclick='show3dModel(\""+parentRowKey+"/"+cellValue+"\")'\>";
-                            return "<input type='button' value='view' title='Click to view an alignment comparison on a popup' onclick='showAlign()'\>";
+                            return "<input type='button' value='view' title='Click to view an alignment comparison on a popup' onclick='showAlign(\""+parentRowKey+"/"+cellValue+"\")'\>";
                         }
                     },
                     { label: "3D Model", name: "PDB",width: 75,align:'center',search:false,editable:false,hidden: false,
@@ -276,9 +314,8 @@
                 width: '100%',
                 height: '100%',
                 shrinkToFit: true,
-                treeGrid: true,
-                ExpandColumn: 'Model Type',ExpandColClick:true,
                 multiselect: true,
+                treeGrid: true,ExpandColumn: 'Model Type',ExpandColClick:false,
                 onSelectRow: onSelectRow,
                 treeGridModel:"adjacency",
                 teedatatype:"json",
@@ -317,19 +354,23 @@
                             
                             //setDownlodeable(pdb);
                             //alert("pdb: "+pdb);
-                            if(pdb !== null)
+                            if(pdb !== null){
                                 setDownlodeable(isChecked,pdb.valueOf());
 //                            if(psf !== null)
 //                                setDownlodeable(isChecked,psf.valueOf());
+                            }
                         });
                     }
                 }
                 //pager: "#" + childGridPagerID
             });
-
             function setDownlodeable(isChecked,pdb) {
                 if(pdb !== null)
                 {
+                    
+                    //for new download
+                    var localPdb = (pdb+"").replace("http://localhost/cxGrid/","../");
+                    //
                     var link = document.createElement("a");
                     link.id=pdb;
                     link.download ='';
@@ -342,23 +383,39 @@
                     //alert("var: "+link);
                     if(isChecked)
                     {
+                        //addpdb to downloaderHelper
+//                        var files=document.getElementById("selectedFiles");
+                        files.push(localPdb);
+                        //end
+                        
                         div.appendChild(link);
                         //document.body.appendChild(link);
                         //alert("added: "+pdb);
                     }
                     else
                     {
+                        //download helper
+//                        var files=document.getElementById("selectedFiles");
+                        if(files.length >0)
+                        {
+                            files.splice(files.indexOf(localPdb),1);
+                        }
+                        //end
                         var j=0,l=div.children.length;
                         //alert(j+" "+l);
                         for(j = 0; j < l;j+=1)
                         {
                             //alert("Asdfsdaf");
-                            var child=div.children[j].href;
-                            //alert(child+"\n"+link+"\n"+( child == link));
-                            if( child == link)
+                            var c= div.children[j];
+                            if(c!==null&&typeof c!== 'undefined')
                             {
-//                                alert("wii!");
-                                div.removeChild(div.children[j]);
+                                var child=c.href;
+                                //alert(child+"\n"+link+"\n"+( child == link));
+                                if( child == link)
+                                {
+    //                                alert("wii!");
+                                    div.removeChild(div.children[j]);
+                                }
                             }
                         }
                     }
@@ -484,23 +541,52 @@
         //replaced with a dusty solution
         function onSelectRow(id,status,e)
         {
+//            alert("acuse");
             $('#'+id)[0].firstChild.firstChild.click();
         }
         
+        function txtSearchEnter(t,e){
+            //e = e || window.event;
+            var keyCode = (window.event) ? e.which : e.keyCode;
+//            alert(keyCode);
+            if(keyCode === 13)
+            {
+//                alert(t.value);
+                searchModel(t.value);
+            }
+        }
+        var isFullSearch=false;
+        function getNumId(id)
+        {
+            //Original Inverse function
+            //'0000'+parseInt(cellValue).toString(36)+parseInt(pid).toString(36)).slice(-4)
+            if(id.length===4)
+            {
+                isFullSearch = true;
+                return parseInt(id.slice(0,2),36)+" "+parseInt(id.slice(2,4),36);
+            }
+            else
+                isFullSearch = false;
+            return id;
+        }
+        
         function searchModel(id) {
+            if(id==='' ||id === null|| id==='undefined') return;
             //select
+            var fullId=getNumId(id).split(" ");
+            id=fullId[0];
+            var pId = fullId[1];
             var data = $("#jqGrid").jqGrid('getGridParam', 'data');
             for (var i = 0; i < data.length; i++) {
                 //check into subgrid
 //                alert(data[i].Name);
                 var sData = $("#jqGrid_"+data[i].Name+"_table").jqGrid('getGridParam', 'data');
                 for (var j = 0; j < sData.length; j++) {
-//                    alert(sData[j].id);
-                    if( (sData[j].id+"").indexOf(id) > -1 ){
+//                    alert(sData[j].id+" input: "+id);
+                    if( isFullSearch?(sData[j].id == id):((sData[j].id+"").indexOf(id) > -1)){
+//                        alert(isFullSearch);
                         selectAndExpand(data[i].Name,sData[j].id);
-//                        alert("abuscar!");
                     }
-                    
                 }
             }
         }
@@ -508,11 +594,11 @@
         function selectAndExpand(table,id)
         {
             var pGrid = '#jqGrid_'+table+'_table';
-            $(pGrid).jqGrid('setSelection',id,false);
+            $(pGrid).jqGrid('setSelection',id,true);
             $('#jqGrid').jqGrid ('expandSubGridRow', table);
             var sel =$(pGrid).jqGrid('getLocalRow',id);
             
-            var row = $("#jqGrid_cx39_table").jqGrid("getNodeParent",sel);
+            var row = $(pGrid).jqGrid("getNodeParent",sel);
             $(pGrid).jqGrid('expandRow', row);
             $(pGrid).jqGrid('expandNode', row);
         }

@@ -1,0 +1,4 @@
+Remember to ser write and read permission to this folder
+
+Sebastian Contreras
+0 0 * * *  python /var/www/html/cxGrid/delete_jobs.py /var/www/html/cxGrid/public

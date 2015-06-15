@@ -33,7 +33,7 @@ $db = mysql_connect($dbhost, $dbuser, $dbpassword) or die("Connection Error: " .
 mysql_select_db($database) or die("Error connecting to db."); 
  
 // calculate the number of rows for the query. We need this for paging the result 
-$result = mysql_query("SELECT COUNT(*) AS count FROM getAllProteins LIMIT $start , $limit"); 
+$result = mysql_query("SELECT COUNT(*) AS count FROM getAllProteins"); // LIMIT $start , $limit"); 
 $row = mysql_fetch_array($result,MYSQL_ASSOC); 
 $count = $row['count']; 
  
@@ -61,7 +61,6 @@ $result = mysql_query( $SQL ) or die("Couldn't execute query.".mysql_error());
  
 // we should set the appropriate header information. Do not forget this.
 header("Content-type: text/xml;charset=utf-8");
- 
 $s = "<?xml version='1.0' encoding='utf-8'?>";
 $s .=  "<rows>";
 $s .= "<page>".$page."</page>";

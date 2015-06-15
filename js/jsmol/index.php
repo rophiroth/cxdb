@@ -18,8 +18,8 @@ function doLoad() {
 <tr>
 
 <td id=tdA> 
-<!--<script>jmolApplet(400,"load ../../proteinModels/<?php echo $_GET['pdb']?>;cartoon only;color cartoon structure;");</script>-->
-<script>jmolApplet(400,"load ../../proteinModels/cx39/AA_HC_CX39.pdb;cartoon only;color cartoon structure;");</script>
+<script>jmolApplet(400,"load ../../proteinModels/<?php echo $_GET['pdb']?>;cartoon only;color cartoon structure;");</script>
+<!--<script>jmolApplet(400,"load ../../proteinModels/cx39/AA_HC_CX39.pdb;cartoon only;color cartoon structure;");</script>-->
 </td>
 </tr>
 
