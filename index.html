@@ -4,20 +4,32 @@
     <!-- The jQuery library is a prerequisite for all jqSuite products -->
     <script type="text/ecmascript" src="js/jquery.min.js"></script> 
     <script type="text/ecmascript" src="js/jquery.form.js"></script> 
-    <!-- This is the Javascript file of jqGrid -->   
-    <script type="text/ecmascript" src="js/trirand/jquery.jqGrid.min.js"></script>
+    
     <!-- This is the localization file of the grid controlling messages, labels, etc.
-    <!-- We support more than 40 localizations -->
-    <script type="text/ecmascript" src="js/trirand/i18n/grid.locale-en.js"></script>
+    
     <!-- A link to a jQuery UI ThemeRoller theme, more than 22 built-in and many more custom -->
     <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.css" />
-    <script src="js/jquery-ui.min.js"></script>
-    <!-- The link to the CSS that the grid needs -->
-    <link type="text/ecmascript" rel="stylesheet" type="text/css" media="screen" href="css/trirand/ui.jqgrid.css" />
-<!--    jquery shits-->
     <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">-->
+    <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">-->
+    <!--<script src="//code.jquery.com/jquery-1.10.2.js"></script>-->
+    <!--<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
     <script type="text/ecmascript" src="js/jquery-ui.js"></script>
-    <script type="text/ecmascript" src="js/jquery-1.10.2.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <!--JQGRID SPECIFIC-->
+    
+    <!-- This is the Javascript file of jqGrid -->   
+    <script type="text/ecmascript" src="js/trirand/jquery.jqGrid.min.js"></script>
+    <!-- We support more than 40 localizations -->
+    <script type="text/ecmascript" src="js/trirand/i18n/grid.locale-en.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/trirand/ui.jqgrid.css" /><!-- The link to the CSS that the grid needs -->
+<!--    jquery shits END-->
+
+    <!--<script type="text/ecmascript" src="js/jquery-1.10.2.js"></script>-->
+    <!--PHYLOGENIE-->
+    <link rel="stylesheet" href="css/phylodoc.css">
+<!--    <script type="text/javascript" src="js/phylo/raphael-min.js" ></script>
+    <script type="text/javascript" src="js/phylo/jsphylosvg-min.js"></script>-->
+    <script type="application/javascript" src="js/phylo/PhyloCanvas.js"></script>
 
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <title>The protein DB model grid</title>
@@ -35,38 +47,109 @@
         //ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable ui-resizable{ width: auto; maxwidth: 900px}
         .ui-jqgrid-sortable{font-size:14px !important;}
         .ui-jqgrid tr.jqgrow td {font-size:13px !important;}
+        .ui-widget button {font-size:13px !important;}
+        .ui-widget {font-size:13px !important;}
         //.ui-search-toolbar{font-size:19px;} .ui-jqgrid-htable{font-size:19px;}
         //.ui-widget-content ui-corner-all{font-size:19px;}
         //.ui-search-input{font-size:13px;}
         //.ui-search-table{font-size:13px;}
         /*.ui-widget-content.ui-corner-all{ font-size:14px !important;}*/
     </style>
-    <!--BUSQUEDA EXTERNA ESPECIFICA-->
-    <div id="searchDiv" style="height: '100%'; width: 1100px;" title="Click to see advanced search options.">
-        <h3>Direct Model Search</h3>
-        <div>
-            <input type="text" id="txtSearch" onkeypress="return txtSearchEnter(this,event);" />
-            <input type="button" value="Search" onclick="searchModel(document.getElementById('txtSearch').value)" />
-        </div>
-    </div><br />
+    <!--TABS-->
+    <div id="tabs">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#phylo">Phylogeny</a></li>
+          <li><a href="#main">Connexin DB</a></li>
+          <li><a href="#etc">etc</a></li>
+        </ul>
+        <div id="phylo">Filoginia
+            Text size: <button onClick="textSize('plus');">+</button> <button onClick="textSize('minus');">-</button>
+            <div id="pc-buttons">
+              <button id="rectangular" class="btn">Rectangular</button>
+              <button id="circular" class="btn">Circular</button>
+              <button id="radial" class="btn" >Radial</button>
+              <button id="diagonal" class="btn" >Diagonal</button>
+              <button id="hierarchy" class="btn" >Hierarchical</button>
+            </div>
+            <div id="svgCanvas" style="width:800px; height:600px;"> </div>
+            <script type="text/javascript">
+                //###phylocanvas
+                $(document).on('click','#pc-buttons .btn', {} ,function(e){
+                    $('#pc-buttons .btn').removeClass('btn-info');
+                    $('#pc-buttons .btn').addClass('btn-default');
+                    $(this).addClass('btn-info');
+                        phylocanvas.setTreeType(this.id);
+                });
+                function textSize(type) {
+                    if(type == "plus" && text_size <= 200) {
+                      phylocanvas.setTextSize(++text_size);
+                    }
+                    else if(type == "minus" && text_size >= 1) {
+                      phylocanvas.setTextSize(--text_size);
+                    }
+                  }
+                function phyloLoaded()
+                {
+                    phylocanvas.setTextSize( 23);
+                    phylocanvas.zoom = .5;
+                }
 
-    <table id="jqGrid"></table>
-    <div id="jqGridPager"></div>
-    <div id="pvDialog" title="3D Model" hidden >
-        <!--<iframe id="pvDialogFrame" src="js/pv/index.html" width="600" height="500"></iframe>-->
-        <iframe id="pvDialogFrame" width="500" height="530"></iframe>
+                var text_size = 23,zoom=0.01;
+                var phylocanvas = new PhyloCanvas.Tree('svgCanvas', {history: {collapsed: true},defaultCollapsed: {min: 150,max: 1000,color: 'green'}}); // initialize your tree viewer
+                phylocanvas.load('js/phylo/Filogenia.nwk'); // load your tree file
+                phylocanvas.addListener('loaded', phyloLoaded);
+                phylocanvas.setTreeType('circular');
+                phylocanvas.setNodeSize( 10);
+                //###btns
+                $(function() {
+                $( "input[type=submit], button" ).button()});
+                //###jsphylosyg
+//                $(document).ready(function(){
+//                        $.get("js/phylo/Filogenia.xml", function(data) {
+//                                var dataObject = {
+//                                        xml: data,
+//                                        fileSource: true
+//                                };		
+//                                phylocanvas = new Smits.PhyloCanvas(
+//                                        dataObject,
+//                                        'svgCanvas', 
+//                                        800, 800,
+//                                        'circular'
+//                                );
+//                        });
+//                });
+            </script>
+        </div>        
+        <!--BUSQUEDA EXTERNA ESPECIFICA-->
+        <div id="main">
+            <div id="searchDiv" style="height: '100%'; width: 1100px;" title="Click to see advanced search options.">
+                <h3>Direct Model Search</h3>
+                <div>
+                    <input type="text" id="txtSearch" placeholder="Enter model ID..." value="" onkeypress="return txtSearchEnter(this,event);" onfocus="if (this.value==this.defaultValue) this.value='';" onblur="if(this.value==''){this.value=''}" />
+                    <input type="submit" value="Search" onclick="searchModel(document.getElementById('txtSearch').value)" />
+                </div>
+            </div><br />
+
+            <table id="jqGrid"></table>
+            <div id="jqGridPager"></div>
+            <div id="pvDialog" title="3D Model" hidden >
+                <!--<iframe id="pvDialogFrame" src="js/pv/index.html" width="600" height="500"></iframe>-->
+                <iframe id="pvDialogFrame" width="500" height="530"></iframe>
+            </div>
+            <div id="pvDialogAlignment" title="Alignment" hidden >
+                <!--<iframe id="pvDialogFrame" src="js/pv/index.html" width="600" height="500"></iframe>-->
+                <iframe id="pvDialogAlignmentFrame" width="750" height="530"></iframe>
+            </div>
+        <!--    <input type="button" value="Download Selected Models" onclick="downloadSelecteds()" />-->
+            <form id="downloadForm" action="php/downloaderHelper.php" method="post">
+                <!--<input type="text" id="selectedFiles" name="files" hidden>-->
+                <input id="downloadBtn" type="submit" value="Download Selected Models">
+                <div id="loading" hidden>Loading Please Wait....<img src="css/images/ajax-loader.gif" alt="Searching" /></div>
+            </form>
+            <div id="downloader"></div>
+        </div>
     </div>
-    <div id="pvDialogAlignment" title="Alignment" hidden >
-        <!--<iframe id="pvDialogFrame" src="js/pv/index.html" width="600" height="500"></iframe>-->
-        <iframe id="pvDialogAlignmentFrame" width="750" height="530"></iframe>
-    </div>
-<!--    <input type="button" value="Download Selected Models" onclick="downloadSelecteds()" />-->
-    <form id="downloadForm" action="php/downloaderHelper.php" method="post">
-        <!--<input type="text" id="selectedFiles" name="files" hidden>-->
-        <input id="downloadBtn" type="submit" value="Download Selected Models">
-        <div id="loading" hidden>Loading Please Wait....<img src="css/images/ajax-loader.gif" alt="Searching" /></div>
-    </form>
-    <div id="downloader"></div>
 <!--    zip scripts-->
 <!--    <script type="text/javascript" src="js/zip.js"></script>
     <script type="text/javascript" src="js/simpleZip.js"></script>
@@ -77,7 +160,7 @@
     <script type="text/javascript"> 
         //alert(parseInt('ZZ',36)+" "+(parseInt(1295)).toString(36));
         var files = [];
-        $(document).ready(function () {
+        $(document).ready(function () {        
             //###DOWNLOADER FORM
             $('#downloadForm').ajaxForm({data:{files:files},beforeSubmit: function(){
                     if(files.length >0)
@@ -92,7 +175,7 @@
                     }
                 }
                 ,success: function(r) {
-                alert("url: "+r); 
+//                alert("url: "+r); 
                 var link = document.createElement("a");
                 link.id=r;
                 link.download ='';
@@ -103,12 +186,9 @@
             }}); 
 //            $('#downloadForm').ajaxForm(callDownloadHelper);
             //###SEARCHDIV
-
-            $( "#searchDiv" ).accordion({
-                    collapsible: true,
-                    active: false
-            });
-            
+            $( "#searchDiv" ).accordion({collapsible: true,active: false});
+            //###TABS
+            $(function() { $( "#tabs" ).tabs(); });
             
             //###JQGRID
             $("#jqGrid").jqGrid({
