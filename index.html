@@ -63,6 +63,7 @@
           <li><a href="#main">Connexin DB</a></li>
           <li><a href="#etc">etc</a></li>
         </ul>
+        <div id="home"><p><iframe src="intro.html" style="height: 600px; width: 940px;"></iframe></p></div>
         <div id="phylo">Filoginia
             Text size: <button onClick="textSize('plus');">+</button> <button onClick="textSize('minus');">-</button>
             <div id="pc-buttons">
@@ -93,6 +94,43 @@
                 {
                     phylocanvas.setTextSize( 23);
                     phylocanvas.zoom = .5;
+                    phylocanvas.backColour = true;
+//                    phylocanvas.setNodeColourAndShape("'CXA1_RAT'", 'orange', 'o');
+//                    phylocanvas.branches["'CXA1_RAT'"]['data'] = {'column1':10, 'Column2': 0};
+//                    phylocanvas.viewMetadataColumns();
+//                    alert(phylocanvas.leaves[0].id);
+                    colourAll();
+//                    phylocanvas.draw();
+                }
+                
+                function colourAll()
+                {
+                    for(node of phylocanvas.leaves)
+                    {
+//                        alert(node+" "+phylocanvas.leaves[0]);
+                        switch(node.id.charAt(3))
+                        {   //A: green B: blue G: brown D: red E: yellow? zeta: purple
+                            case 'B':
+                                phylocanvas.setNodeColourAndShape(node.id, 'red', 'x');
+                                break;
+                            case 'A':
+                                phylocanvas.setNodeColourAndShape(node.id, 'orange', 's');
+                                break;
+                            case 'A':
+                                phylocanvas.setNodeColourAndShape(node.id, 'yellow', 's');
+                                break;
+                            case 'D':
+                                phylocanvas.setNodeColourAndShape(node.id, 'green', 'o');    
+                                break;
+                            case 'G':
+                                phylocanvas.setNodeColourAndShape(node.id, 'blue', 'x');    
+                                break;
+                            case 'E':
+                                phylocanvas.setNodeColourAndShape(node.id, 'purple', 't');
+                                break;
+                        }
+                        node.id = node.id.replace("'","");
+                    }
                 }
 
                 var text_size = 23,zoom=0.01;
@@ -104,6 +142,7 @@
                 //###btns
                 $(function() {
                 $( "input[type=submit], button" ).button()});
+                
                 //###jsphylosyg
 //                $(document).ready(function(){
 //                        $.get("js/phylo/Filogenia.xml", function(data) {
@@ -664,7 +703,7 @@
         }
         
         function searchModel(id) {
-            if(id==='' ||id === null|| id==='undefined') return;
+            if(id==='' ||id === null|| typeof id===undefined|| !$.isNumeric(id)) return;
             //select
             var fullId=getNumId(id).split(" ");
             id=fullId[0];
@@ -675,8 +714,8 @@
 //                alert(data[i].Name);
                 var sData = $("#jqGrid_"+data[i].Name+"_table").jqGrid('getGridParam', 'data');
                 for (var j = 0; j < sData.length; j++) {
-//                    alert(sData[j].id+" input: "+id);
-                    if( isFullSearch?(sData[j].id == id):((sData[j].id+"").indexOf(id) > -1)){
+//                    alert(sData[j].id+" inp ut: "+id);
+                    if(sData[j].id !==null&&typeof sData[j]!==undefined&& isFullSearch?(sData[j].id == id):((sData[j].id+"").indexOf(id) > -1)){
 //                        alert(isFullSearch);
                         selectAndExpand(data[i].Name,sData[j].id);
                     }
@@ -690,10 +729,15 @@
             $(pGrid).jqGrid('setSelection',id,true);
             $('#jqGrid').jqGrid ('expandSubGridRow', table);
             var sel =$(pGrid).jqGrid('getLocalRow',id);
-            
-            var row = $(pGrid).jqGrid("getNodeParent",sel);
-            $(pGrid).jqGrid('expandRow', row);
-            $(pGrid).jqGrid('expandNode', row);
+            if(sel!==null&&typeof sel!==undefined)
+            {
+                var row = $(pGrid).jqGrid("getNodeParent",sel);
+                if(row!==null&&typeof row!==undefined)
+                {
+                    $(pGrid).jqGrid('expandRow', row);
+                    $(pGrid).jqGrid('expandNode', row);
+                }
+            }
         }
     </script>
 </body>
