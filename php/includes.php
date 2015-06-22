@@ -7,7 +7,6 @@
  */
 
   if ($handle = opendir('/path/to/files')) {
-
     while (false !== ($file = readdir($handle))) {
         if (filectime($file) < (time() - 86400)) {  // 86400 = 60*60*24
             unlink($file);

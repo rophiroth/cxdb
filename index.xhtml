@@ -27,12 +27,12 @@
     <!--<script type="text/ecmascript" src="js/jquery-1.10.2.js"></script>-->
     <!--PHYLOGENIE-->
     <link rel="stylesheet" href="css/phylodoc.css">
-<!--    <script type="text/javascript" src="js/phylo/raphael-min.js" ></script>
-    <script type="text/javascript" src="js/phylo/jsphylosvg-min.js"></script>-->
+    <!--<script type="text/javascript" src="js/phylo/raphael-min.js" ></script>-->
+    <!--<script type="text/javascript" src="js/phylo/jsphylosvg-min.js"></script>-->
     <script type="application/javascript" src="js/phylo/PhyloCanvas.js"></script>
 
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
-    <title>CxDB - Connexin DataBase</title>
+    <title>The protein DB model grid</title>
 </head>
 <body>
     <style type="text/css">
@@ -56,15 +56,14 @@
         /*.ui-widget-content.ui-corner-all{ font-size:14px !important;}*/
     </style>
     <!--TABS-->
-    <div id="tabs"> <!--style="width:'auto';">-->
+    <div id="tabs">
         <ul>
           <li><a href="#home">Home</a></li>
           <li><a href="#phylo">Phylogeny</a></li>
           <li><a href="#main">Connexin DB</a></li>
           <li><a href="#terms">Terms of service</a></li>
-          <li><a href="#about">About</a></li>
         </ul>
-        <div id="home"><iframe src="intro.html" style="height: 600px; width: 940px; border: none;" seamless></iframe></div>
+        <div id="home"><p><iframe src="intro.html" style="height: 600px; width: 940px;"></iframe></p></div>
         <div id="phylo">Filoginia
             Text size: <button onClick="textSize('plus');">+</button> <button onClick="textSize('minus');">-</button>
             <div id="pc-buttons">
@@ -189,8 +188,7 @@
             </form>
             <div id="downloader"></div>
         </div>
-        <div id="terms"><iframe src="terms.html" style="height: 650px; width: 940px; border: none;" seamless></iframe> </div>
-        <div id="about"><iframe src="about.html" style="height: 650px; width: 940px; border: none;" seamless></iframe> </div>
+        <div id="terms"><?php include 'terms.html'; echo "asfdasdf";?>testing</div>
     </div>
 <!--    zip scripts-->
 <!--    <script type="text/javascript" src="js/zip.js"></script>
@@ -198,8 +196,7 @@
     <script type="text/javascript" src="js/FileSaver.js"></script>-->
     <script src="js/jquery-multidownload/jquery-multidownload.js"></script>
     <!--//PHP INCLUDES-->
-<!--    <?php include 'php/includes.php';?>-->
-<iframe src='php/includes.php' hidden></iframe>
+    <?php include 'php/includes.php';?>
     <script type="text/javascript"> 
         //alert(parseInt('ZZ',36)+" "+(parseInt(1295)).toString(36));
         var files = [];
@@ -749,17 +746,5 @@
             }
         }
     </script>
-    <!--GOOGLE ANALYTICS-->
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-64267689-1', 'auto');
-        ga('send', 'pageview');
-
-    </script>
-    <!--GOOGLE ANALYTICS END-->
 </body>
 </html>
