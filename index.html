@@ -66,8 +66,8 @@
           <li><a href="#about">About</a></li>
         </ul>
         <div id="home"><iframe src="intro.html" style="height: 650px; width: 100%; border: none; margin-left: 5%; margin-top: 2%; " seamless></iframe></div>
-        <!--Filoginia-->
-        <div id="phylo">Filoginia
+        <!--Filogenia-->
+        <div id="phylo">
             Text size: <button onClick="textSize('plus');">+</button> <button onClick="textSize('minus');">-</button>
             <div id="pc-buttons">
               <button id="rectangular" class="btn">Rectangular</button>
@@ -192,8 +192,8 @@
             </form>
             <div id="downloader"></div>
         </div>
-        <div id="terms"><iframe src="terms.html" style="height: 650px; width: 940px; border: none;" seamless></iframe> </div>
-        <div id="about"><iframe src="about.html" style="height: 650px; width: 940px; border: none;" seamless></iframe> </div>
+        <div id="terms"><iframe src="terms.html" style="height: 650px; width: 940px; border: none;" seamless><p>Your browser does not support iframes.</p></iframe> </div>
+        <div id="about"><iframe src="about.html" style="height: 650px; width: 940px; border: none;" seamless><p>Your browser does not support iframes.</p></iframe> </div>
     </div>
 <!--    zip scripts-->
 <!--    <script type="text/javascript" src="js/zip.js"></script>
@@ -202,7 +202,7 @@
     <script src="js/jquery-multidownload/jquery-multidownload.js"></script>
     <!--//PHP INCLUDES-->
 <!--    <?php include 'php/includes.php';?>-->
-<iframe src='php/includes.php' hidden></iframe>
+<iframe src='/php/includes.php' hidden><p>Your browser does not support iframes.</p></iframe>
     <script type="text/javascript"> 
         //alert(parseInt('ZZ',36)+" "+(parseInt(1295)).toString(36));
         var files = [];
@@ -398,7 +398,9 @@
             $( "#pvDialogAlignment" ).parent().css( "width", "auto");
 //            $( "#pvDialogAlignmentFrame").attr('src','http://strap.charite.de/aaBeta/aa.php?beforeAC=load%20http://146.83.236.8/alignment.fasta&afterAC=set_color_mode+zappo%0Aset_conservation_threshold+90');
 //alert('http://localhost/aa/aa.php?beforeAC=load%20http://localhost/cxGrid/proteinModels/'+pdb+'&afterAC=set_color_mode+zappo%0Aset_conservation_threshold+90');
-            $( "#pvDialogAlignmentFrame").attr('src','http://localhost/aa/aa.php?beforeAC=load%20http://localhost/cxGrid/proteinModels/'+pdb+'&afterAC=set_color_mode+zappo%0Aset_conservation_threshold+90');
+//            $( "#pvDialogAlignmentFrame").attr('src','http://localhost/aa/aa.php?beforeAC=load%20http://localhost/cxGrid/proteinModels/'+pdb+'&afterAC=set_color_mode+zappo%0Aset_conservation_threshold+90');
+            $( "#pvDialogAlignmentFrame").attr('src','/aa/aa.php?beforeAC=load%20http://'+window.location.hostname+'/cxGrid/proteinModels/'+pdb+'&afterAC=set_color_mode+zappo%0Aset_conservation_threshold+90');
+//            $( "#pvDialogAlignmentFrame").attr('src','/aa/aa.php?beforeAC=load/alineamiento.fasta&afterAC=set_color_mode+zappo%0Aset_conservation_threshold+90');
         }
         // the event handler on expanding parent row receives two parameters
         // the ID of the grid tow  and the primary key of the row

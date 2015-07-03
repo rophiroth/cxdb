@@ -20,7 +20,8 @@ setTimeout(function(){ document.getElementById("warning").hidden=true; }, 2000);
 <!--<td id=tdA>-->
 <script>
     var pdb="<?php echo $_GET['pdb']?>",surface="";
-    if((pdb+"").includes("lipids")||pdb.includes("solvate"))
+//    if((pdb+'').includes('lipids')||pdb.includes('solvate'))
+    if((pdb+'').indexOf('lipids')>-1||pdb.indexOf('solvate')>-1)
     {
         surface="isosurface vdw translucent";
 //        document.writeln("This could take some minute to load and may crush your browser.");
