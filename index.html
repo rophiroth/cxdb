@@ -76,7 +76,7 @@
               <button id="diagonal" class="btn" >Diagonal</button>
               <button id="hierarchy" class="btn" >Hierarchical</button>
             </div>
-            <div id="svgCanvas" style="width:800px; height:600px;"> </div>
+            <div id="svgCanvas" style="width:1800px; height:1600px;"> </div>
             <script type="text/javascript">
                 //###phylocanvas
                 $(document).on('click','#pc-buttons .btn', {} ,function(e){
@@ -202,7 +202,7 @@
     <script src="js/jquery-multidownload/jquery-multidownload.js"></script>
     <!--//PHP INCLUDES-->
 <!--    <?php include 'php/includes.php';?>-->
-<iframe src='/php/includes.php' hidden><p>Your browser does not support iframes.</p></iframe>
+<iframe src='php/includes.php' hidden><p>Your browser does not support iframes.</p></iframe>
     <script type="text/javascript"> 
         //alert(parseInt('ZZ',36)+" "+(parseInt(1295)).toString(36));
         var files = [];
@@ -243,10 +243,10 @@
                 //mtype: "GET",
                 //datatype: "json",
                 url: 'db/proteins.php',
-                datatype: 'xml',
+                datatype: 'json',
                 page: 1,
                 colModel: [
-                    {   label : "id",sorttype: 'integer',name: 'id',hidden:true,width: 150,editable: true},
+                    {   label : "ID",name: 'id',sorttype: 'integer',key: true,hidden:false,width: 150,editable: true},
                     {   label : "Name",name: 'Name',key: false,width: 150,editable: true,stype: "text",searchoptions: { value: ":All" }},
                     {   label : "Family",name: 'Family',width: 150,editable: true,stype: "select",searchoptions: { value: ":All" }},
                     {   label : "Structure Type",name: 'Structure Type',width: 150,editable: true,stype: "select",searchoptions: { value: ":All" }},
@@ -258,7 +258,7 @@
 		viewrecords: true,
                 width: 1100,
                 height: 550,
-                rowNum: 10,
+                rowNum: -1,
                 shrinkToFit: true,
                 subGrid: true, // set the subGrid property to true to show expand buttons for each row
                 onSelectRow:  function (rowId) { $(this).jqGrid ('toggleSubGridRow', rowId);},
@@ -411,7 +411,7 @@
             var pid = $("#jqGrid").jqGrid('getCell',parentRowKey,'id');
             //alert(pid+" "+childGridID +" "+ parentRowKey);
             // send the parent row primary key to the server so that we know which grid to show
-            var childGridURL = "proteinModels/"+parentRowKey+"/"+parentRowKey+".json";
+            var childGridURL = "proteinModels/"+parentRowKey+".json";
             //childGridURL = childGridURL + "&parentRowID=" + encodeURIComponent(parentRowKey)
             actualSubGrid = childGridID;
             // add a table and pager HTML elements to the parent grid row - we will render the child grid here
@@ -425,7 +425,8 @@
                 page: 1,
                 colModel: [
                     { label:' ',index:'select',name:'select',edittype:'checkbox',hidden:false,editable:true,width:15,search:false,formatter: "checkbox",formatoptions:{disabled:false},cellattr: function () { return ' title="Click to select models and then press Download button for bulk download"'; }},
-                    { label: 'ID', name: 'id', key: true, width: 70,align:'center',search:false, editable: true,formatter: function formatId(cellValue, options, rowObject) {
+                    { label: 'ID', name: 'id', key: true, width: 70,align:'center',hidden:true,search:false, editable: true},
+                    { label: 'ID', name: 'Model id', width: 70,align:'center',search:false, editable: true,formatter: function formatId(cellValue, options, rowObject) {
                     return ('0000'+parseInt(cellValue).toString(36)+parseInt(pid).toString(36)).slice(-4); } },
                     { label: 'Model Type', name: 'Model Type', width: 100,search:false, editable: true,cellattr:function(){return' title="Click triangle to expand"'; } },
                     { label: 'Evaluator', name: 'Evaluator', width: 75,search:false, editable: true },
@@ -434,28 +435,30 @@
                     { label: 'Alignment', name: 'Alignment', width: '150%',search:false, editable: true,formatter: formatLink, autowidth: true,hidden: false },
                     { label: 'Seq Identity', name: 'Sequence Identity',align:'center', width: 80,search:false, editable: true,formatter: addPercent, autowidth: true,hidden: false },
                     { label: 'Seq Similarity', name: 'Sequence Similarity',align:'center', width: 75,search:false, editable: true,formatter: addPercent, autowidth: true,hidden: false },
-                    { label: "View Alignment", name: "Alignment",width: 75,align:'center',search:false,editable:false,hidden: false,
+                    { label: "Alignment", name: "Alignment",width: 75,align:'center',search:false,editable:false,hidden: false,
                         formatter: function(cellValue, options, rowObject){
                             //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+parentRowKey+"/"+cellValue);
                             //$( "#pvDialogFrame" ).attr('src','js/jsmol/index.php?pdb='+parentRowKey+"/"+cellValue);
 //                            return "<input type='button' value='view' title='Click to view an alignment comparison on a popup' onclick='show3dModel(\""+parentRowKey+"/"+cellValue+"\")'\>";
-                            return "<input type='button' value='view' title='Click to view an alignment comparison on a popup' onclick='showAlign(\""+parentRowKey+"/"+cellValue+"\")'\>";
+                            return "<input type='button' value='view' title='Click to view an alignment comparison on a popup' onclick='showAlign(\""+cellValue+"\")'\>";
                         }
                     },
                     { label: "3D Model", name: "PDB",width: 75,align:'center',search:false,editable:false,hidden: false,
                         formatter: function(cellValue, options, rowObject){
                             //$( "#pvDialogFrame" ).attr('src','js/pv/index.html#'+parentRowKey+"/"+cellValue);
                             //$( "#pvDialogFrame" ).attr('src','js/jsmol/index.php?pdb='+parentRowKey+"/"+cellValue);
-                            return "<input type='button' value='view' title='Click view 3d model on a popup' onclick='show3dModel(\""+parentRowKey+"/"+cellValue+"\")'\>";
+                            return "<input type='button' value='view' title='Click view 3d model on a popup' onclick='show3dModel(\""+cellValue+"\")'\>";
                         }
                     },
                     //{ name: 'level', hidden: true },{ name: 'parent_id', hidden: true },{ name: 'isLeaf', hidden: true },{ name: 'expanded', hidden: true }
                 ],
 		loadonce: true,
+//                viewRecords: true,
                 width: '100%',
                 height: '100%',
+                rowNum: -1,
                 shrinkToFit: true,
-                multiselect: true,
+//                multiselect: true,
                 treeGrid: true,ExpandColumn: 'Model Type',ExpandColClick:false,
                 onSelectRow: onSelectRow,
                 treeGridModel:"adjacency",
@@ -606,7 +609,7 @@
         //});
             function formatLink(cellValue, options, rowObject) {
                 if( cellValue !== '' && cellValue !== 'undefined' )
-                    return "<a id=\""+cellValue+"\" download href='" +"proteinModels/"+parentRowKey+"/"+ cellValue + "'>"+cellValue+ "</a>";
+                    return "<a id=\""+cellValue+"\" download href='" +"proteinModels/"+ cellValue + "'>"+cellValue+ "</a>";
                 else
                     return '';
             };

@@ -79,14 +79,18 @@ $s = "{\n\r\"rows\":\n[";
 $firstRow = true;
 $modelTypes = array();
 $parentIndex = 0; //index of the last line of the last parent row, used to add parent specifict string for treegrid
+$parentId;
+$uId; //unique ID formed from model id+type+evaluator
 while($row = mysql_fetch_array($result,MYSQL_ASSOC)) {
     if($row['Protein ID'] == $pid){
         //check first row or not to put ,
         if($firstRow){
             $firstRow=false;
         }else{ $s .= ","; }
-        
-        $s .= "{\"id\":". $row['id'].",";            
+        $uId= $row['id']. $row['Model Type'].$row['Evaluator'];
+        $s .= "{";
+        $s .= "\"id\":\"". $uId."\",";
+        $s .= "\"Model id\":". $row['id'].",";
         $s .= "\"Model Type\":\"". $row['Model Type']."\",";
         $s .= "\"Evaluator\":\"". $row['Evaluator']."\",";
         $s .= "\"Score\":\"". $row['Score']."\",";
@@ -95,11 +99,12 @@ while($row = mysql_fetch_array($result,MYSQL_ASSOC)) {
         $s .= "\"Sequence Identity\":\"". $row['Sequence Identity']."\",";
         $s .= "\"Sequence Similarity\":\"". $row['Sequence Similarity']."\"";
         //Check Model type to group them, use first row of each model type to group
-        if(!in_array($row['Model Type'],$modelTypes,true)){
-            $modelTypes[]= $row['Model Type'];
+        if(!in_array($row['Model Type'].$row['Evaluator'],$modelTypes,true)){
+            $modelTypes[]= $row['Model Type'].$row['Evaluator'];
             $parentIndex=strlen($s);
 //            echo $parentIndex;
             //$s .= ",\"level\":0";
+            $parentId = $uId;
         }
         else
         {
@@ -109,12 +114,13 @@ while($row = mysql_fetch_array($result,MYSQL_ASSOC)) {
                 $parentIndex = -1;
             }
             $s .= ",\"level\":1,";
-            $s .= "\"parent_id\":\"0\",";
+            $s .= "\"parent_id\":\"$parentId\",";
             $s .= "\"isLeaf\":true";
         }
 
         //$s .= "<cell>". getArrayText($row['isHeteromeric'], $row['isHeterotipic'])."</cell>";
         $s .= "}";
+//        $s .= "}<br>";
     }
 }
 $s .= "]}"; 
