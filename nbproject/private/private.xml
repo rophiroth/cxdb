@@ -4,13 +4,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/html/cxGrid/proteinModels/cx26gjc/cx26gjc.json</file>
-            <file>file:/var/www/html/cxGrid/proteinModels/cx26/cx26.json</file>
             <file>file:/var/www/html/cxGrid/index.html</file>
             <file>file:/var/www/html/cxGrid/js/jsmol/index.php</file>
-            <file>file:/var/www/html/cxGrid/db/medoo.min.php</file>
             <file>file:/var/www/html/cxGrid/db/data.json</file>
-            <file>file:/var/www/html/cxGrid/proteinModels/cx39/cx39.json</file>
+            <file>file:/var/www/html/cxGrid/db/medoo.min.php</file>
             <file>file:/var/www/html/cxGrid/db/proteins.php</file>
         </group>
     </open-files>
